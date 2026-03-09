@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://cp6cers4t7k1n"]
+
+[ext_resource type="Script" uid="uid://d3cip3s76w34x" path="res://Scenes/Player.gd" id="1_a02cp"]
+[ext_resource type="Texture2D" uid="uid://cg8v1hl0ni2a1" path="res://Textures/696.jpg" id="1_go701"]
+[ext_resource type="PackedScene" uid="uid://b4hko1p1u5d04" path="res://Scenes/crypt_root.tscn" id="3_5a7ea"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a02cp"]
+albedo_texture = ExtResource("1_go701")
+uv1_triplanar = true
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_go701"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_5a7ea"]
+sky_material = SubResource("ProceduralSkyMaterial_go701")
+
+[sub_resource type="Environment" id="Environment_8j60k"]
+background_mode = 2
+sky = SubResource("Sky_5a7ea")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_fo5ed"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_a02cp"]
+
+[node name="World" type="Node3D" unique_id=1527560976]
+
+[node name="Map" type="Node3D" parent="." unique_id=349619049]
+
+[node name="graveyardmap" type="CSGBox3D" parent="Map" unique_id=1496086234]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.011138916, 0, 0.034834385)
+use_collision = true
+size = Vector3(100, 0.002, 100)
+material = SubResource("StandardMaterial3D_a02cp")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Map" unique_id=447048093]
+environment = SubResource("Environment_8j60k")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Map" unique_id=511232951]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=559504217]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6842859, 0)
+script = ExtResource("1_a02cp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=1558572057]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0040534, 0)
+mesh = SubResource("CapsuleMesh_fo5ed")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1844345560]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0040534, 0)
+shape = SubResource("CapsuleShape3D_a02cp")
+
+[node name="Head" type="Node3D" parent="CharacterBody3D" unique_id=632207739]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.464699, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Head" unique_id=1980928724]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3433197, 0)
+
+[node name="CryptRoot" parent="." unique_id=1801635178 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
