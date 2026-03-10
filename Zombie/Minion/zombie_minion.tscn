@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cjbmehmcdw5fx"]
+
+[ext_resource type="PackedScene" uid="uid://brybuvy2cs0se" path="res://Zombie/Minion/Skeleton_Minion.glb" id="1_gkcfe"]
+[ext_resource type="AnimationLibrary" uid="uid://dm1fu28ih6ync" path="res://Zombie/Rig_Medium/Rig_Medium_CombatMelee.glb" id="2_1ud3p"]
+[ext_resource type="AnimationLibrary" uid="uid://b2wcuknhtkde4" path="res://Zombie/Minion/Rig_Medium_MovementBasic.glb" id="3_jllgs"]
+[ext_resource type="PackedScene" uid="uid://c3sgac0uaw2ag" path="res://Zombie/gltf/Skeleton_Blade.gltf" id="4_4q803"]
+
+[node name="Zombie_minion" type="Node3D" unique_id=1939290540]
+
+[node name="Skeleton_Minion" parent="." unique_id=1028153967 instance=ExtResource("1_gkcfe")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Skeleton_Minion" unique_id=635821597]
+libraries/Rig_Medium_CombatMelee = ExtResource("2_1ud3p")
+libraries/Rig_Medium_MovementBasic = ExtResource("3_jllgs")
+
+[node name="Skeleton_Blade2" parent="Skeleton_Minion" unique_id=2007807971 instance=ExtResource("4_4q803")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.47673094, 1.1365651, 0.39934278)

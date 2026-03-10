@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bahs3i5rt2mi0"
-path="res://.godot/imported/crypt-large-roof.glb-a4a115684d7e2d9668fd1f9a55fa9a6e.scn"
+uid="uid://15vjoh4s8r26"
+path="res://.godot/imported/Skeleton_Warrior.glb-bbd7e05a06a6a036d2f105da2877dffd.scn"
 
 [deps]
 
-source_file="res://Models/Graveyard/crypt-large-roof.glb"
-dest_files=["res://.godot/imported/crypt-large-roof.glb-a4a115684d7e2d9668fd1f9a55fa9a6e.scn"]
+source_file="res://Zombie/Warrior/Skeleton_Warrior.glb"
+dest_files=["res://.godot/imported/Skeleton_Warrior.glb-bbd7e05a06a6a036d2f105da2877dffd.scn"]
 
 [params]
 

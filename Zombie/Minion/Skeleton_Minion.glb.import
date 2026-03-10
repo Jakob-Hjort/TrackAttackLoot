@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://3rcgkso3sv6s"
-path="res://.godot/imported/crypt-large.glb-05a7830051b12436fb6c68b86e0742b3.scn"
+uid="uid://brybuvy2cs0se"
+path="res://.godot/imported/Skeleton_Minion.glb-85f1588d5142cd4562a7663cb41d7e76.scn"
 
 [deps]
 
-source_file="res://Models/Graveyard/crypt-large.glb"
-dest_files=["res://.godot/imported/crypt-large.glb-05a7830051b12436fb6c68b86e0742b3.scn"]
+source_file="res://Zombie/Minion/Skeleton_Minion.glb"
+dest_files=["res://.godot/imported/Skeleton_Minion.glb-85f1588d5142cd4562a7663cb41d7e76.scn"]
 
 [params]
 

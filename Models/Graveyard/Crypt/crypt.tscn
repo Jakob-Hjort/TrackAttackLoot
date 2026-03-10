@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cde1famohtjgy"]
 
-[ext_resource type="PackedScene" uid="uid://3rcgkso3sv6s" path="res://Models/Graveyard/crypt-large.glb" id="1_26lhc"]
-[ext_resource type="PackedScene" uid="uid://bahs3i5rt2mi0" path="res://Models/Graveyard/crypt-large-roof.glb" id="2_71r7b"]
+[ext_resource type="PackedScene" uid="uid://3rcgkso3sv6s" path="res://Models/Graveyard/Crypt/crypt-large.glb" id="1_26lhc"]
+[ext_resource type="PackedScene" uid="uid://bahs3i5rt2mi0" path="res://Models/Graveyard/Crypt/crypt-large-roof.glb" id="2_71r7b"]
 
 [node name="Crypt-large" type="StaticBody3D" unique_id=833311219]
 
