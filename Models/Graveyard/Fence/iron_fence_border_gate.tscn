@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://di8l5y8d5h5ht"]
+
+[ext_resource type="PackedScene" uid="uid://bt6d44pderdry" path="res://Models/Graveyard/Fence/iron-fence-border-gate.glb" id="1_4gk8p"]
+[ext_resource type="Texture2D" uid="uid://yhm6fhen0ydw" path="res://Textures/colormap.png" id="2_e3lyl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ybx06"]
+albedo_texture = ExtResource("2_e3lyl")
+
+[node name="iron-fence-border-gate2" unique_id=910251016 instance=ExtResource("1_4gk8p")]
+
+[node name="iron-fence-border-gate" parent="." index="0" unique_id=490565169]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18374848, -0.16089606, 0.21701992)
+surface_material_override/0 = SubResource("StandardMaterial3D_ybx06")

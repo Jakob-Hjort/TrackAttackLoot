@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://ds4xul0bk0epk"]
+
+[ext_resource type="PackedScene" uid="uid://dthdmrrrg6c2t" path="res://Models/Graveyard/Fence/fence_gate.gltf" id="1_gsmk5"]
+
+[node name="Node3D" type="Node3D" unique_id=887672611]
+
+[node name="fence_gate2" parent="." unique_id=1933093485 instance=ExtResource("1_gsmk5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25144708, 0, 0.037684917)
