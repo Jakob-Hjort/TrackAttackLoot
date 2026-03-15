@@ -1,27 +1,30 @@
 [gd_scene format=3 uid="uid://c2xjdod3ogbr4"]
 
-[ext_resource type="Script" uid="uid://bm6v36ekyqxpe" path="res://Scripts/player.gd" id="1_cvnsp"]
-[ext_resource type="PackedScene" uid="uid://d21p5lpqyhaij" path="res://Assets/Scenes/barbarian.tscn" id="1_v0iea"]
+[ext_resource type="Script" uid="uid://bm6v36ekyqxpe" path="res://Scripts/Loot/player.gd" id="1_cvnsp"]
+[ext_resource type="PackedScene" uid="uid://d21p5lpqyhaij" path="res://Assets/Characters/Scenes/barbarian.tscn" id="1_v0iea"]
 [ext_resource type="Script" uid="uid://dwl4jufc5xttp" path="res://Scripts/HealthComponent.gd" id="3_6t5aa"]
 [ext_resource type="Script" uid="uid://bkihf5iwuey6w" path="res://Scripts/HurtboxComponent.gd" id="4_fkybt"]
 [ext_resource type="Script" uid="uid://box3w6ofxpmlv" path="res://Scripts/HitboxComponent.gd" id="5_x3wgy"]
+[ext_resource type="Script" uid="uid://dsir1rxgqkkey" path="res://Scripts/Player/PlayerInventory.gd" id="6_x3wgy"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cvnsp"]
-radius = 0.64404297
+radius = 0.5517578
 height = 2.178711
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3smsa"]
+radius = 0.64746094
 height = 2.1013184
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8erm5"]
-size = Vector3(0.76049805, 0.49609375, 0.5137825)
+size = Vector3(0.59173584, 0.49609375, 0.5137825)
 
 [node name="Player" type="CharacterBody3D" unique_id=1674603981]
+collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_cvnsp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1706481909]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0011083186, 1.276199, 0.308968)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0011083186, 1.276199, 0.00896728)
 shape = SubResource("CapsuleShape3D_cvnsp")
 
 [node name="VisualRoot" type="Node3D" parent="." unique_id=1909381966]
@@ -40,9 +43,9 @@ transform = Transform3D(-1, 2.2626683e-08, -8.444392e-08, 0, 0.9659259, 0.258819
 script = ExtResource("3_6t5aa")
 
 [node name="HurtboxComponent" type="Area3D" parent="." unique_id=905473864]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3841858e-07, 0)
-collision_layer = 2
-collision_mask = 16
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.08863866, 0)
+collision_layer = 8
+collision_mask = 0
 script = ExtResource("4_fkybt")
 health_component_path = NodePath("../HealthComponent")
 
@@ -51,11 +54,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3404541, 0)
 shape = SubResource("CapsuleShape3D_3smsa")
 
 [node name="AttackHitbox" type="Area3D" parent="." unique_id=397494760]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.43484068, 0.8770062, 0.9582336)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.148, 0.877, 1.270365)
 collision_layer = 8
-collision_mask = 4
+collision_mask = 16
 script = ExtResource("5_x3wgy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AttackHitbox" unique_id=787051975]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.26113278, 0.25195313, -0.07010126)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23142403, 0.25195313, -0.009265065)
 shape = SubResource("BoxShape3D_8erm5")
+
+[node name="WeaponHolder" type="Node3D" parent="." unique_id=1449885371]
+
+[node name="PlayerInventory" type="Node3D" parent="." unique_id=1087421142]
+script = ExtResource("6_x3wgy")

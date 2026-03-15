@@ -5,7 +5,7 @@ signal health_changed(current_health, max_health)
 signal damaged(damage_data)
 signal died
 
-@export var max_health: int = 100
+@export var max_health: int = 150
 var current_health: int
 
 func _ready():

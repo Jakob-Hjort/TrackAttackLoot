@@ -1,0 +1,271 @@
+[gd_scene format=3 uid="uid://clnrb4uqidgr7"]
+
+[ext_resource type="Script" uid="uid://vipfa4n0u56x" path="res://Scripts/Player/player_hud.gd" id="1_thblv"]
+[ext_resource type="Texture2D" uid="uid://dnpakr67i6iwf" path="res://UI/ICONS/coin.png" id="2_ica2d"]
+[ext_resource type="Texture2D" uid="uid://ci3ykoaaekscn" path="res://UI/ICONS/backpack.png" id="3_rgtnt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ica2d"]
+bg_color = Color(0.3133042, 0.33361515, 0.38109186, 0.6)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5370987, 0.5657284, 0.6262097, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rgtnt"]
+bg_color = Color(0.11764706, 0.11764706, 0.11764706, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.039215688, 0.039215688, 0.039215688, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kdm15"]
+bg_color = Color(0.3099057, 0.7072969, 7.70092e-07, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18044198, 0.56307083, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_y1ekg"]
+font_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y1ekg"]
+bg_color = Color(0.11764706, 0.11764706, 0.11764706, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.039215688, 0.039215688, 0.039215688, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xbu5o"]
+bg_color = Color(0.3154639, 0.59693503, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0.30248353, 0.6574552, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_xbu5o"]
+font_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_axhau"]
+bg_color = Color(0.11764706, 0.11764706, 0.11764706, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.039215688, 0.039215688, 0.039215688, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5m6qm"]
+bg_color = Color(0.5722162, 0.00023747713, 0.5722121, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.34443098, 8.0546815e-05, 0.3444285, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_ica2d"]
+font_size = 11
+
+[sub_resource type="LabelSettings" id="LabelSettings_rgtnt"]
+font_size = 20
+
+[sub_resource type="LabelSettings" id="LabelSettings_kdm15"]
+font_size = 12
+
+[sub_resource type="LabelSettings" id="LabelSettings_5m6qm"]
+font_size = 12
+
+[node name="PlayerHud" type="CanvasLayer" unique_id=1590374003]
+script = ExtResource("1_thblv")
+metadata/_edit_vertical_guides_ = [191.0, 224.0]
+
+[node name="Control" type="Control" parent="." unique_id=116259559]
+layout_mode = 3
+anchor_right = 0.347
+anchor_bottom = 0.193
+offset_right = 0.25598145
+offset_bottom = -0.06400299
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="Control" unique_id=1318707762]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ica2d")
+
+[node name="HealthBarContainer" type="Control" parent="Control" unique_id=54554988]
+custom_minimum_size = Vector2(340, 30)
+anchors_preset = 0
+offset_left = 55.0
+offset_top = 5.0
+offset_right = 335.0
+offset_bottom = 35.0
+
+[node name="HealthBar" type="ProgressBar" parent="Control/HealthBarContainer" unique_id=150596991]
+custom_minimum_size = Vector2(340, 30)
+layout_mode = 0
+offset_right = 280.0
+offset_bottom = 30.0
+theme_override_styles/background = SubResource("StyleBoxFlat_rgtnt")
+theme_override_styles/fill = SubResource("StyleBoxFlat_kdm15")
+show_percentage = false
+
+[node name="HealthText" type="Label" parent="Control/HealthBarContainer" unique_id=159739442]
+layout_mode = 0
+offset_left = 144.0
+offset_top = 1.0
+offset_right = 194.0
+offset_bottom = 29.0
+label_settings = SubResource("LabelSettings_y1ekg")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ManaBarContainer" type="Control" parent="Control" unique_id=601111181]
+custom_minimum_size = Vector2(340, 25)
+anchors_preset = 0
+offset_left = 55.0
+offset_top = 38.0
+offset_right = 335.0
+offset_bottom = 58.0
+
+[node name="ManaBar" type="ProgressBar" parent="Control/ManaBarContainer" unique_id=597022661]
+custom_minimum_size = Vector2(340, 25)
+layout_mode = 0
+offset_right = 340.0
+offset_bottom = 25.0
+theme_override_styles/background = SubResource("StyleBoxFlat_y1ekg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_xbu5o")
+show_percentage = false
+
+[node name="ManaText" type="Label" parent="Control/ManaBarContainer" unique_id=1672283368]
+custom_minimum_size = Vector2(50, 23)
+layout_mode = 0
+offset_left = 144.0
+offset_top = 1.0
+offset_right = 194.0
+offset_bottom = 24.0
+label_settings = SubResource("LabelSettings_xbu5o")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="XpBarContainer" type="Control" parent="Control" unique_id=90856530]
+custom_minimum_size = Vector2(340, 10)
+anchors_preset = 0
+offset_left = 55.0
+offset_top = 66.0
+offset_right = 395.0
+offset_bottom = 76.0
+
+[node name="XpBar" type="ProgressBar" parent="Control/XpBarContainer" unique_id=1968969035]
+custom_minimum_size = Vector2(340, 10)
+layout_mode = 0
+offset_right = 340.0
+offset_bottom = 10.0
+theme_override_font_sizes/font_size = 10
+theme_override_styles/background = SubResource("StyleBoxFlat_axhau")
+theme_override_styles/fill = SubResource("StyleBoxFlat_5m6qm")
+
+[node name="LVLContainer" type="Control" parent="Control" unique_id=1581295970]
+anchors_preset = 0
+offset_left = 7.5
+offset_top = 5.0
+offset_right = 42.5
+offset_bottom = 35.0
+scale = Vector2(1.2093899, 1.2093899)
+
+[node name="LVL" type="Label" parent="Control/LVLContainer" unique_id=1979632089]
+layout_mode = 0
+offset_right = 35.0
+offset_bottom = 16.0
+theme_override_font_sizes/font_size = 12
+text = "LVL"
+label_settings = SubResource("LabelSettings_ica2d")
+horizontal_alignment = 1
+
+[node name="LevelText" type="Label" parent="Control/LVLContainer" unique_id=172676860]
+layout_mode = 0
+offset_top = 17.0
+offset_right = 35.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 20
+label_settings = SubResource("LabelSettings_rgtnt")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Coin_Inventory" type="Control" parent="Control" unique_id=1457892084]
+anchors_preset = 0
+offset_left = 55.0
+offset_top = 84.0
+offset_right = 395.0
+offset_bottom = 121.0
+
+[node name="CoinIcon" type="TextureRect" parent="Control/Coin_Inventory" unique_id=1868986456]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 0
+offset_right = 35.0
+offset_bottom = 35.0
+texture = ExtResource("2_ica2d")
+expand_mode = 5
+stretch_mode = 6
+
+[node name="CoinText" type="Label" parent="Control/Coin_Inventory" unique_id=495541560]
+custom_minimum_size = Vector2(50, 35)
+layout_mode = 0
+offset_left = 37.0
+offset_right = 87.0
+offset_bottom = 35.0
+label_settings = SubResource("LabelSettings_kdm15")
+vertical_alignment = 1
+
+[node name="InventoryIcon" type="TextureRect" parent="Control/Coin_Inventory" unique_id=1404809637]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 0
+offset_left = 168.0
+offset_right = 203.0
+offset_bottom = 35.0
+texture = ExtResource("3_rgtnt")
+expand_mode = 5
+stretch_mode = 6
+
+[node name="InventoryText" type="Label" parent="Control/Coin_Inventory" unique_id=612327899]
+custom_minimum_size = Vector2(50, 35)
+layout_mode = 0
+offset_left = 215.0
+offset_top = 1.0
+offset_right = 265.0
+offset_bottom = 36.0
+label_settings = SubResource("LabelSettings_5m6qm")
+vertical_alignment = 1
