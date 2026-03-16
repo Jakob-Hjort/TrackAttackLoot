@@ -12,7 +12,13 @@ func _ready():
 	current_health = max_health
 	health_changed.emit(current_health, max_health)
 
-func apply_damage(damage_data: DamageData):
+func apply_damage(damage_data: DamageData) -> void:
+	if damage_data == null:
+		return
+
+	if damage_data.amount <= 0:
+		return
+
 	current_health -= damage_data.amount
 	current_health = max(current_health, 0)
 
@@ -22,7 +28,10 @@ func apply_damage(damage_data: DamageData):
 	if current_health <= 0:
 		died.emit()
 
-func heal(amount: int):
+func heal(amount: int) -> void:
+	if amount <= 0:
+		return
+
 	current_health += amount
 	current_health = min(current_health, max_health)
 	health_changed.emit(current_health, max_health)

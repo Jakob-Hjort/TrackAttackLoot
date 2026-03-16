@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dsme17p2imcjv" path="res://Assets/Characters/Barbarian.glb" id="1_pewin"]
 [ext_resource type="AnimationLibrary" uid="uid://cpuh8vvyxc4rn" path="res://Assets/Animations/Rig_Medium_Animations/Player_barbarian.res" id="2_qpcy2"]
+[ext_resource type="PackedScene" uid="uid://dq0jo1k50m3ul" path="res://Assets/Characters/Scenes/Weapons/1handaxes/axe_1handed_b_equip.tscn" id="2_ugfjq"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qb5v2"]
 animation = &"Player_barbarian/Idle_A"
@@ -118,19 +119,45 @@ graph_offset = Vector2(-92, -298.4539)
 
 [node name="Barbarian" unique_id=1875706365 instance=ExtResource("1_pewin")]
 
-[node name="Left_Hand" type="BoneAttachment3D" parent="Rig_Medium/Skeleton3D" parent_id_path=PackedInt32Array(1608688606) index="7" unique_id=1131422947]
-transform = Transform3D(-2.784026e-07, 0.999999, -3.6335038e-07, -5.3096744e-07, 4.6128986e-07, 0.9999994, 0.9999994, 3.5663743e-07, 6.234486e-07, 0.78700715, 1.1067611, -6.8134943e-07)
+[node name="Skeleton3D" parent="Rig_Medium" parent_id_path=PackedInt32Array(137786167) index="0" unique_id=1608688606]
+bones/4/rotation = Quaternion(-0.5141216, -0.48546767, -0.48546773, 0.5141217)
+bones/5/rotation = Quaternion(1.4942605e-09, -6.228117e-08, -0.055285532, 0.99847066)
+bones/7/rotation = Quaternion(1.2001637e-09, 1.3589292e-07, -5.4551956e-06, 1)
+bones/8/rotation = Quaternion(1.6806122e-09, 1.680612e-09, -0.7071068, 0.7071067)
+bones/10/rotation = Quaternion(-0.51412165, 0.48546773, 0.48546776, 0.5141218)
+bones/11/rotation = Quaternion(1.49426e-09, 6.228117e-08, 0.055285532, 0.99847066)
+bones/13/rotation = Quaternion(1.1999162e-09, -9.210969e-08, 5.4551956e-06, 1)
+bones/14/rotation = Quaternion(1.6805921e-09, -1.6805919e-09, 0.7071068, 0.7071067)
+bones/15/rotation = Quaternion(0.9998491, -7.13275e-08, -1.20427455e-08, 0.017373193)
+bones/16/rotation = Quaternion(0.10622513, 6.8652206e-08, -7.376967e-08, 0.99434215)
+bones/17/rotation = Quaternion(-0.45523903, 1.619773e-08, -3.435674e-08, 0.8903693)
+bones/18/rotation = Quaternion(4.775981e-08, 0.92035496, -0.3910841, 5.8015768e-08)
+bones/19/rotation = Quaternion(0.9998491, 7.426558e-08, -3.1726263e-08, 0.017373193)
+bones/20/rotation = Quaternion(0.10622513, -6.865223e-08, 7.376966e-08, 0.99434215)
+bones/21/rotation = Quaternion(-0.45523903, 1.6598169e-07, 2.2507123e-09, 0.8903693)
+bones/22/rotation = Quaternion(2.1219835e-08, 0.92035496, -0.3910841, 6.450607e-08)
+
+[node name="Left_Hand" type="BoneAttachment3D" parent="Rig_Medium/Skeleton3D" index="7" unique_id=1131422947]
+transform = Transform3D(-1.5546901e-07, 0.9999991, -6.532731e-08, -3.2854626e-07, 5.4986135e-08, 0.9999995, 0.9999995, 1.405715e-07, 2.6582097e-07, 0.7870073, 1.1067609, -8.016089e-07)
 bone_name = "hand.l"
 bone_idx = 7
 
-[node name="Right_Hand" type="BoneAttachment3D" parent="Rig_Medium/Skeleton3D" parent_id_path=PackedInt32Array(1608688606) index="8" unique_id=1992689389]
-transform = Transform3D(-3.4918403e-07, -0.9999991, 4.527573e-07, 5.8875344e-07, 3.9324703e-07, 0.9999995, -0.9999995, 2.7840724e-07, 5.3588224e-07, -0.7870073, 1.1067611, -7.253101e-07)
+[node name="WeaponHolderOffHand" type="Node3D" parent="Rig_Medium/Skeleton3D/Left_Hand" index="0" unique_id=1155758018]
+
+[node name="Right_Hand" type="BoneAttachment3D" parent="Rig_Medium/Skeleton3D" index="8" unique_id=1992689389]
+transform = Transform3D(-1.5174281e-07, -0.999999, 9.51296e-08, 2.146409e-07, 1.1620003e-07, 0.9999995, -0.9999994, 1.0704298e-07, 1.7825455e-07, -0.7870072, 1.1067609, -8.1898617e-07)
 bone_name = "hand.r"
 bone_idx = 13
+
+[node name="WeaponHolderMainHand" type="Node3D" parent="Rig_Medium/Skeleton3D/Right_Hand" index="0" unique_id=1581669649]
+
+[node name="axe_A2" parent="Rig_Medium/Skeleton3D/Right_Hand/WeaponHolderMainHand" index="0" unique_id=1584711161 instance=ExtResource("2_ugfjq")]
+transform = Transform3D(1, 7.1054274e-15, 1.4210855e-14, -1.4210855e-14, 1, 5.7326123e-15, -1.4210855e-14, 1.6595442e-15, 1, 1.0291842e-08, 0.096146226, 0)
 
 [node name="AnimationPlayerPlayer" type="AnimationPlayer" parent="." index="1" unique_id=1242803304]
 libraries/Player_barbarian = ExtResource("2_qpcy2")
 
 [node name="AnimationTreePlayer" type="AnimationTree" parent="." index="2" unique_id=1285471414]
+active = false
 tree_root = SubResource("AnimationNodeStateMachine_r62t2")
 anim_player = NodePath("../AnimationPlayerPlayer")

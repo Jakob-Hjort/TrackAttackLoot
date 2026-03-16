@@ -5,17 +5,39 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_dqmmn"]
 radius = 0.6
 
-[sub_resource type="SphereMesh" id="SphereMesh_gg2i2"]
-radius = 1.0
-height = 2.0
+[sub_resource type="CylinderMesh" id="CylinderMesh_gg2i2"]
+top_radius = 0.08
+bottom_radius = 0.08
+height = 1.8
 
-[node name="Area3D" type="Area3D" unique_id=1063128725]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rg653"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 0.45000002)
+
+[node name="LootDrop" type="Area3D" unique_id=1063128725]
 script = ExtResource("1_gg2i2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1876307428]
 shape = SubResource("SphereShape3D_dqmmn")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2102268566]
-transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
-layers = 2
-mesh = SubResource("SphereMesh_gg2i2")
+[node name="MeshRoot" type="Node3D" parent="." unique_id=615895104]
+
+[node name="Label3D" type="Label3D" parent="." unique_id=979598654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+billboard = 1
+
+[node name="InteractLabel" type="Label3D" parent="." unique_id=1668461197]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+visible = false
+billboard = 1
+
+[node name="GlowLight" type="OmniLight3D" parent="." unique_id=977333943]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+light_energy = 0.8
+omni_range = 3.0
+
+[node name="RarityBeam" type="MeshInstance3D" parent="." unique_id=987307153]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("CylinderMesh_gg2i2")
+surface_material_override/0 = SubResource("StandardMaterial3D_rg653")

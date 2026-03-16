@@ -1,12 +1,12 @@
 [gd_scene format=4 uid="uid://dtn1m0brcarp6"]
 
-[ext_resource type="Texture2D" uid="uid://djmxkvqgr7e7r" path="res://Assets/Accessories/Player Accessories/barbarian_texture.png" id="1_8udak"]
-[ext_resource type="Script" uid="uid://box3w6ofxpmlv" path="res://Scripts/HitboxComponent.gd" id="2_jkt2m"]
+[ext_resource type="Texture2D" uid="uid://djmxkvqgr7e7r" path="res://Assets/Accessories/Player Accessories/barbarian_texture.png" id="1_1uj24"]
+[ext_resource type="Script" uid="uid://box3w6ofxpmlv" path="res://Scripts/HitboxComponent.gd" id="2_ayay4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_doak5"]
 resource_name = "barbarian"
 cull_mode = 2
-albedo_texture = ExtResource("1_8udak")
+albedo_texture = ExtResource("1_1uj24")
 roughness = 0.5
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_72hus"]
@@ -44,19 +44,19 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_72hus")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_20osv"]
-size = Vector3(0.7501221, 0.6639557, 0.8697052)
+size = Vector3(0.77349854, 0.6639557, 1.2423286)
 
-[node name="OnhandedAxe" type="Node3D" unique_id=1765295666]
+[node name="axe_1handed_a" type="Node3D" unique_id=1765295666]
 
-[node name="axe_1handed" type="MeshInstance3D" parent="." unique_id=268627739]
+[node name="WeaponModel" type="MeshInstance3D" parent="." unique_id=268627739]
 transform = Transform3D(0.3082189, -0.76546156, 0.56486255, -0.9512512, -0.254887, 0.17364822, 0.011055082, -0.59084785, -0.80670726, -0.05, 0.05, 0)
 mesh = SubResource("ArrayMesh_5tvri")
 
 [node name="AttackHitbox" type="Area3D" parent="." unique_id=749197392]
 collision_layer = 8
 collision_mask = 16
-script = ExtResource("2_jkt2m")
+script = ExtResource("2_ayay4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AttackHitbox" unique_id=1087868447]
-transform = Transform3D(0.7544118, 0, -0.65640146, 0, 1, 0, 0.65640146, 0, 0.7544118, -0.6888669, 0.6145299, -0.43258336)
+transform = Transform3D(0.7544118, 0, -0.65640146, 0, 1, 0, 0.65640146, 0, 0.7544118, -0.71750987, 0.6145299, -0.41747013)
 shape = SubResource("BoxShape3D_20osv")

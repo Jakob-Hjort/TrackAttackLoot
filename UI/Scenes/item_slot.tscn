@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://cdr472xsntafk"]
+
+[ext_resource type="Script" uid="uid://db12xsn13ysx4" path="res://UI/Scenes/item_slot.gd" id="1_ve0xb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pmgqm"]
+bg_color = Color(0.08627451, 0.09803922, 0.12156863, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.29803923, 0.33333334, 0.4, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="ItemSlot" type="TextureButton" unique_id=926175299]
+custom_minimum_size = Vector2(84, 84)
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_ve0xb")
+
+[node name="SlotBackground" type="Panel" parent="." unique_id=1168541985]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pmgqm")
+
+[node name="ItemIcon" type="TextureRect" parent="." unique_id=671275891]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 5
+stretch_mode = 5

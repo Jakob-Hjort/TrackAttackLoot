@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://c3pfl8bvuou37"]
+
+[ext_resource type="Script" uid="uid://cxrgm6byiu5of" path="res://UI/Scenes/icon_render_scene.gd" id="1_4u45a"]
+[ext_resource type="PackedScene" uid="uid://2gwjamkj4gqu" path="res://Assets/Accessories/Player Accessories/axe_1handed.gltf" id="1_v0n7x"]
+
+[sub_resource type="Environment" id="Environment_4u45a"]
+background_mode = 1
+background_color = Color(0.13725491, 0.13725491, 0.13725491, 1)
+
+[node name="IconRenderScene" type="Node3D" unique_id=638836781]
+script = ExtResource("1_4u45a")
+
+[node name="IconViewport" type="SubViewport" parent="." unique_id=880806828]
+size = Vector2i(256, 256)
+render_target_update_mode = 4
+
+[node name="IconRoot" type="Node3D" parent="IconViewport" unique_id=203550584]
+
+[node name="WeaponAnchor" type="Node3D" parent="IconViewport/IconRoot" unique_id=129996859]
+transform = Transform3D(0.6644629, 0.6644629, -0.3420201, -0.7071067, 0.7071067, 0, 0.24184473, 0.24184473, 0.93969256, -0.2, -0.6, 0)
+
+[node name="axe_1handed2" parent="IconViewport/IconRoot/WeaponAnchor" unique_id=515767219 instance=ExtResource("1_v0n7x")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="IconViewport" unique_id=1219253734]
+transform = Transform3D(0.8660254, -0.28678823, 0.40957603, 0, 0.81915206, 0.57357645, -0.5, -0.49673176, 0.7094065, 0, 0, 0)
+light_energy = 2.2
+sky_mode = 1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="IconViewport" unique_id=422475341]
+environment = SubResource("Environment_4u45a")
+
+[node name="CameraPivot" type="Node3D" parent="IconViewport" unique_id=180143747]
+transform = Transform3D(1, 0, 0, 0, 0.9848077, 0.17364818, 0, -0.17364818, 0.9848077, 0, 0.8, 0)
+
+[node name="Camera3D" type="Camera3D" parent="IconViewport/CameraPivot" unique_id=1325132872]
+transform = Transform3D(1, 0, 0, 0, 0.9848077, 0.17364818, 0, -0.17364818, 0.9848077, 0, 0, 5)
+current = true
+fov = 20.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="IconViewport" unique_id=2085374775]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, 1.5)
+light_energy = 1.2
+omni_range = 8.0

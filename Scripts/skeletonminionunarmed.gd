@@ -28,6 +28,12 @@ const ROAM_WAIT_MAX := 2.5
 @onready var health_bar_sprite: Sprite3D = $HealthBarAnchor/Sprite3D
 @onready var enemy_health_bar = $HealthBarAnchor/SubViewport/Control/EnemyHealthBar
 
+@export var mob_id: String = "skeleton_unarmed"
+@export var drop_chance: float = 0.65
+@export var is_elite: bool = false
+@export var is_boss: bool = false
+@export var loot_scene: PackedScene = preload("res://Scenes/loot.tscn")
+
 var player: Node3D = null
 var current_anim := ""
 var is_dead := false
@@ -424,9 +430,23 @@ func give_rewards_to_player() -> void:
 		inventory.add_coins(coin_reward)
 	
 func spawn_loot() -> void:
-	var item = LootGenerator.generate_item("axe-1handed")
-	var loot_scene = preload("res://Scenes/loot.tscn")
-	var loot = loot_scene.instantiate()
+	if randf() > drop_chance:
+		print("No loot dropped")
+		return
+
+	var item := LootGenerator.generate_item_for_mob(mob_id, is_elite, is_boss)
+	if item == null:
+		print("No valid loot item generated for mob_id:", mob_id)
+		return
+
+	if loot_scene == null:
+		print("Loot scene missing on enemy")
+		return
+
+	var loot = loot_scene.instantiate() as LootDrop
+	if loot == null:
+		print("Failed to instantiate loot scene")
+		return
 
 	get_tree().current_scene.add_child(loot)
 	loot.global_position = global_position + Vector3(0, 1.0, 0)
@@ -434,3 +454,5 @@ func spawn_loot() -> void:
 
 	print("Loot spawned at:", loot.global_position)
 	print("Enemy died at:", global_position)
+	print("Mob ID:", mob_id)
+	print("Dropped item:", item.item_name, "rarity:", item.rarity)
