@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cgmhqjymc5cqs"]
+
+[ext_resource type="PackedScene" uid="uid://b66aqctnpfwkk" path="res://Assets/Accessories/Player Accessories/shield_round_barbarian.gltf" id="1_41ute"]
+
+[node name="shield_g_drop" type="Node3D" unique_id=1877356438]
+
+[node name="shield_round_barbarian2" parent="." unique_id=883394392 instance=ExtResource("1_41ute")]
+transform = Transform3D(-4.371139e-08, -1, 0, 1.1924881e-08, -5.2125306e-16, 1, -1, 4.371139e-08, 1.1924881e-08, 0, 0.2, 0)

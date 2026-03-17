@@ -6,6 +6,9 @@ class_name ItemData
 @export var variant_id: String = ""
 @export var rarity: String = "common"
 
+# Fx: "axe", "sword", "shield", "mace", "staff", "bow"
+@export var weapon_family: String = ""
+
 @export var mesh_scene: PackedScene
 @export var icon: Texture2D
 
@@ -25,6 +28,9 @@ func get_display_text() -> String:
 
 	for key in stats.keys():
 		result += "\n" + str(key) + ": +" + str(stats[key])
+
+	if weapon_family != "":
+		result += "\nFamily: " + weapon_family
 
 	if stackable:
 		result += "\nAmount: " + str(quantity)

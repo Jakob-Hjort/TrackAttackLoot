@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CharacterClassData" format=3 uid="uid://kkpr4yvk2y1i"]
+
+[ext_resource type="Script" uid="uid://dqef0wij2pkn5" path="res://Scripts/Player/CharacterClassData.gd" id="1_o0e4w"]
+
+[resource]
+script = ExtResource("1_o0e4w")
+class_id = "knight"
+display_name = "Knight"
+base_max_health = 150
+base_damage = 2
+base_defense = 2
+allow_dual_wield = true
+allowed_weapon_families = Array[String](["sword", "shield"])
+metadata/_custom_type_script = "uid://dqef0wij2pkn5"

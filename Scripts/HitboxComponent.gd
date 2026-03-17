@@ -2,6 +2,7 @@ extends Area3D
 class_name HitboxComponent
 
 signal hit_landed(target, damage_data)
+signal hit_blocked(target, damage_data)
 
 @export var damage_amount: int = 10
 @export var damage_type: String = "physical"
@@ -74,17 +75,38 @@ func _try_hit(target: Node) -> void:
 
 	print("TRY_HIT target:", target.name, " class:", target.get_class())
 
-	if not (target is HurtboxComponent):
-		print("TRY_HIT: not a HurtboxComponent")
-		return
-
 	var dmg := DamageData.new()
 	dmg.amount = damage_amount
 	dmg.damage_type = damage_type
 	dmg.source = owner
 
+	# --------------------------------------------------
+	# 1) Shield block check
+	# --------------------------------------------------
+	if target is ShieldBlock:
+		var shield := target as ShieldBlock
+
+		if shield.can_block():
+			print("TRY_HIT: BLOCKED BY SHIELD ->", target.name)
+			shield.on_blocked_hit(owner, dmg)
+			already_hit.append(target)
+			hit_blocked.emit(target, dmg)
+			return
+		else:
+			print("TRY_HIT: shield found but not actively blocking ->", target.name)
+			return
+
+	# --------------------------------------------------
+	# 2) Normal hurtbox damage
+	# --------------------------------------------------
+	if not (target is HurtboxComponent):
+		print("TRY_HIT: not a HurtboxComponent or ShieldBlock")
+		return
+
 	print("TRY_HIT: DAMAGE SENT TO", target.name, " amount:", dmg.amount)
 
-	target.receive_hit(dmg)
+	var hurtbox := target as HurtboxComponent
+	hurtbox.receive_hit(dmg)
+
 	already_hit.append(target)
 	hit_landed.emit(target, dmg)

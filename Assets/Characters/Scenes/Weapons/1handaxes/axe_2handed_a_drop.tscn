@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dl5xwxhp5bt8b"]
+
+[ext_resource type="PackedScene" uid="uid://bnqf2ubpshsqs" path="res://Assets/Accessories/Player Accessories/axe_2handed.gltf" id="1_s3m2j"]
+
+[node name="Node3D" type="Node3D" unique_id=2127459067]
+
+[node name="axe_2handed2" parent="." unique_id=1172659530 instance=ExtResource("1_s3m2j")]
+transform = Transform3D(-4.371139e-08, -1, 0, -4.371139e-08, 1.9106855e-15, -1, 1, -4.371139e-08, -4.371139e-08, 0, 0.1, 0)

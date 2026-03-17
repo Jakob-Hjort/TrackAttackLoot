@@ -14,6 +14,26 @@ static var ITEM_VARIANTS := {
 			"drop_mesh": preload("res://Assets/Characters/Scenes/Weapons/1handaxes/axe_1handed_a_drop.tscn")
 		}
 	],
+
+	"axe-2-handed": [
+		{
+			"id": "axe_2handed_a",
+			"name": "Great Axe",
+			"icon": preload("res://UI/ICONS/generated/axe_2handed2.png"),
+			"equip_mesh": preload("res://Assets/Characters/Scenes/Weapons/2handaxes/axe_2_handed_a_equip.tscn"),
+			"drop_mesh": preload("res://Assets/Characters/Scenes/Weapons/2handaxes/axe_2_handed_a_drop.tscn")
+		}
+	],
+
+	"shield": [
+		{
+			"id": "shield_a",
+			"name": "Wooden Shield",
+			"icon": preload("res://UI/ICONS/generated/shield_a2.png"),
+			"equip_mesh": preload("res://Assets/Characters/Scenes/Weapons/shields/shield_a_equip.tscn"),
+			"drop_mesh": preload("res://Assets/Characters/Scenes/Weapons/shields/shield_a_drop.tscn")
+		}
+	],
 	"crossbow": [
 		{
 			"id": "crossbow_a",
@@ -217,6 +237,24 @@ static func get_equip_slot_for_item_type(item_type: String) -> String:
 		_:
 			return ""
 
+static func get_weapon_family_for_item_type(item_type: String) -> String:
+	match item_type:
+		"axe-1-handed", "axe-2-handed":
+			return "axe"
+		"sword-1-handed", "sword-2-handed":
+			return "sword"
+		"shield":
+			return "shield"
+		"crossbow":
+			return "crossbow"
+		"staff":
+			return "staff"
+		"wand":
+			return "wand"
+		_:
+			return ""
+
+
 # =========================
 # PICK ITEM TYPE FROM MOB TABLE
 # =========================
@@ -264,6 +302,7 @@ static func generate_item(item_type: String, is_elite: bool = false, is_boss: bo
 	item.item_type = item_type
 	item.rarity = roll_rarity(is_elite, is_boss)
 	item.is_two_handed = is_two_handed_item_type(item_type)
+	item.weapon_family = get_weapon_family_for_item_type(item_type)
 
 	# Variant vælges først
 	var variant := get_random_variant(item_type)

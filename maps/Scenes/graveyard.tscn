@@ -15,7 +15,6 @@
 [ext_resource type="PackedScene" uid="uid://ditk3h8p0j12q" path="res://maps/Graveyard/Walls/stone_wall_curve.tscn" id="14_46438"]
 [ext_resource type="PackedScene" uid="uid://cv24aovusitp6" path="res://maps/Graveyard/Walls/stone_wall_damaged.tscn" id="15_2agrm"]
 [ext_resource type="PackedScene" uid="uid://c2xjdod3ogbr4" path="res://Scenes/player.tscn" id="17_46y86"]
-[ext_resource type="PackedScene" uid="uid://yvqt8aq1qnpq" path="res://Assets/Enemies/Scenes/skeleton_minion_ranged.tscn" id="18_hc0ve"]
 [ext_resource type="PackedScene" uid="uid://dkru5078s3nou" path="res://UI/Scenes/inventory.tscn" id="19_3ivvt"]
 [ext_resource type="PackedScene" uid="uid://ccag0v5gcmuic" path="res://Assets/Enemies/Scenes/skeletonMinionUnarmed.tscn" id="20_i5bqx"]
 [ext_resource type="PackedScene" uid="uid://clnrb4uqidgr7" path="res://UI/Scenes/player_hud.tscn" id="21_i406l"]
@@ -2240,11 +2239,6 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0.5, 105
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.985, 0.5, -12.475)
 player_path = NodePath("../Player")
 attack_damage = 2
-
-[node name="SkeletonMinion_Ranged" parent="." unique_id=913802016 instance=ExtResource("18_hc0ve")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.919, 0.5, 10.507)
-player_path = NodePath("../Player")
-attack_damage = 5
 
 [node name="PlayerHud" parent="." unique_id=1590374003 instance=ExtResource("21_i406l")]
 

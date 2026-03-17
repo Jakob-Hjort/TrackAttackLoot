@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bm6v36ekyqxpe" path="res://Scripts/Loot/player.gd" id="1_cvnsp"]
 [ext_resource type="PackedScene" uid="uid://d21p5lpqyhaij" path="res://Assets/Characters/Scenes/barbarian.tscn" id="1_v0iea"]
+[ext_resource type="Resource" uid="uid://csic2nwyy6qq7" path="res://Scripts/Player/Classes/barbarian_class.tres" id="2_3smsa"]
 [ext_resource type="Script" uid="uid://dwl4jufc5xttp" path="res://Scripts/HealthComponent.gd" id="3_6t5aa"]
 [ext_resource type="Script" uid="uid://bkihf5iwuey6w" path="res://Scripts/HurtboxComponent.gd" id="4_fkybt"]
 [ext_resource type="Script" uid="uid://box3w6ofxpmlv" path="res://Scripts/HitboxComponent.gd" id="5_x3wgy"]
@@ -22,6 +23,7 @@ size = Vector3(0.59173584, 0.49609375, 0.5137825)
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_cvnsp")
+character_class = ExtResource("2_3smsa")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1706481909]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0011083186, 1.276199, 0.00896728)

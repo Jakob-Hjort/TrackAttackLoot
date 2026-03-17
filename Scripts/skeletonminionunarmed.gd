@@ -20,6 +20,7 @@ const ROAM_WAIT_MAX := 2.5
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var animation_player: AnimationPlayer = $AnimationPlayerMinion
 @onready var animation_tree: AnimationTree = $AnimationTreeMinion
+@onready var playback = animation_tree["parameters/playback"]
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var hurtbox: HurtboxComponent = $HurtboxComponent
 
@@ -58,26 +59,23 @@ func _ready() -> void:
 	roam_target = global_position
 
 	if animation_tree:
-		animation_tree.active = false
+		animation_tree.active = true
+		animation_tree.advance(0)
 
 	if health_component:
 		if not health_component.damaged.is_connected(_on_damaged):
 			health_component.damaged.connect(_on_damaged)
 		if not health_component.died.is_connected(_on_died):
 			health_component.died.connect(_on_died)
-			
+
 	if health_bar_sprite and health_bar_viewport:
 		health_bar_sprite.texture = health_bar_viewport.get_texture()
 
-	if enemy_health_bar and health_component:	
+	if enemy_health_bar and health_component:
 		enemy_health_bar.visible = false
 		enemy_health_bar.set_health(health_component.current_health, health_component.max_health)
 
-	play_animation("Minions Animation/Idle_B")
-
-
-
-
+	play_animation("Skeletons_Idle")
 
 func _physics_process(_delta: float) -> void:
 	if is_dead or is_hit:
@@ -88,7 +86,7 @@ func _physics_process(_delta: float) -> void:
 		_find_player()
 		if player == null:
 			velocity = Vector3.ZERO
-			play_animation("Minions Animation/Idle_B")
+			play_animation("Skeletons_Idle")
 			move_and_slide()
 			return
 
@@ -155,14 +153,14 @@ func chase_player() -> void:
 		face_player()
 
 		if not is_attacking:
-			play_animation("Minions Animation/Idle_B")
+			play_animation("Skeletons_Idle")
 		return
 
 	nav_agent.target_position = player.global_position
 
 	if nav_agent.is_navigation_finished():
 		velocity = Vector3.ZERO
-		play_animation("Minions Animation/Idle_B")
+		play_animation("Skeletons_Idle")
 		return
 
 	var next_point := nav_agent.get_next_path_position()
@@ -171,7 +169,7 @@ func chase_player() -> void:
 
 	if move_direction.length() < 0.05:
 		velocity = Vector3.ZERO
-		play_animation("Minions Animation/Idle_B")
+		play_animation("Skeletons_Idle")
 		return
 
 	move_direction = move_direction.normalized()
@@ -182,7 +180,7 @@ func chase_player() -> void:
 	face_direction(move_direction)
 
 	if not is_attacking:
-		play_animation("Minions Animation/Running_B")
+		play_animation("Running_B")
 
 func roam() -> void:
 	if is_attacking or is_dead or is_hit:
@@ -190,7 +188,7 @@ func roam() -> void:
 
 	if is_waiting:
 		velocity = Vector3.ZERO
-		play_animation("Minions Animation/Idle_B")
+		play_animation("Skeletons_Idle")
 		return
 
 	if not is_roaming:
@@ -208,7 +206,7 @@ func roam() -> void:
 	if nav_agent.is_navigation_finished():
 		choose_new_roam_target()
 		velocity = Vector3.ZERO
-		play_animation("Minions Animation/Idle_B")
+		play_animation("Skeletons_Idle")
 		return
 
 	var next_point := nav_agent.get_next_path_position()
@@ -218,7 +216,7 @@ func roam() -> void:
 	if move_direction.length() < 0.05:
 		choose_new_roam_target()
 		velocity = Vector3.ZERO
-		play_animation("Minions Animation/Idle_B")
+		play_animation("Skeletons_Idle")
 		return
 
 	move_direction = move_direction.normalized()
@@ -229,7 +227,7 @@ func roam() -> void:
 	face_direction(move_direction)
 
 	if not is_attacking:
-		play_animation("Minions Animation/Walking_B")
+		play_animation("Skeletons_Walking")
 
 func choose_new_roam_target() -> void:
 	is_roaming = true
@@ -254,7 +252,7 @@ func start_roam_wait() -> void:
 	is_roaming = false
 	is_waiting = true
 	velocity = Vector3.ZERO
-	play_animation("Minions Animation/Idle_B")
+	play_animation("Skeletons_Idle")
 
 	var wait_time := randf_range(ROAM_WAIT_MIN, ROAM_WAIT_MAX)
 	await get_tree().create_timer(wait_time).timeout
@@ -263,7 +261,7 @@ func start_roam_wait() -> void:
 		is_waiting = false
 
 func start_attack() -> void:
-	if is_dead or animation_player == null:
+	if is_dead:
 		return
 
 	is_attacking = true
@@ -271,28 +269,25 @@ func start_attack() -> void:
 	current_anim = ""
 	velocity = Vector3.ZERO
 
-	play_animation("Minions Animation/Melee_Unarmed_Attack_Punch_A")
+	play_animation("Melee_Unarmed_Attack_Punch_A")
 
 	await get_tree().create_timer(0.16).timeout
 	if not is_dead and is_attacking:
 		perform_attack_hit()
 
-	var anim := animation_player.get_animation("Minions Animation/Melee_Unarmed_Attack_Punch_A")
-	if anim != null:
-		await get_tree().create_timer(max(anim.length - 0.16, 0.1)).timeout
-	else:
-		await get_tree().create_timer(0.35).timeout
+	await get_tree().create_timer(0.35).timeout
 
-	if is_dead:
-		return
-
-	await get_tree().create_timer(ATTACK_COOLDOWN).timeout
 	if is_dead:
 		return
 
 	can_attack = true
 	is_attacking = false
 	current_anim = ""
+	play_animation("Skeletons_Idle")
+
+	await get_tree().create_timer(ATTACK_COOLDOWN).timeout
+	if is_dead:
+		return
 
 func perform_attack_hit() -> void:
 	if player == null or is_dead:
@@ -330,7 +325,7 @@ func _on_died() -> void:
 	die()
 
 func play_hit() -> void:
-	if is_dead or animation_player == null:
+	if is_dead:
 		return
 
 	is_hit = true
@@ -339,13 +334,10 @@ func play_hit() -> void:
 	is_waiting = false
 	velocity = Vector3.ZERO
 	current_anim = ""
-	play_animation("Minions Animation/Hit_B")
 
-	var anim := animation_player.get_animation("Minions Animation/Hit_B")
-	if anim != null:
-		await get_tree().create_timer(anim.length).timeout
-	else:
-		await get_tree().create_timer(0.35).timeout
+	play_animation("Hit_B")
+
+	await get_tree().create_timer(0.35).timeout
 
 	is_hit = false
 	current_anim = ""
@@ -353,8 +345,8 @@ func play_hit() -> void:
 func die() -> void:
 	if enemy_health_bar:
 		enemy_health_bar.visible = false
-	
-	if is_dead or animation_player == null:
+
+	if is_dead:
 		return
 
 	is_dead = true
@@ -370,13 +362,9 @@ func die() -> void:
 	spawn_loot()
 
 	current_anim = ""
-	play_animation("Minions Animation/Death_A")
+	play_animation("Skeletons_Death")
 
-	var anim := animation_player.get_animation("Minions Animation/Death_A")
-	if anim != null:
-		await get_tree().create_timer(anim.length).timeout
-	else:
-		await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0).timeout
 
 	queue_free()
 
@@ -396,16 +384,17 @@ func face_direction(move_direction: Vector3) -> void:
 	target_pos.y = global_position.y
 	look_at(target_pos, Vector3.UP)
 
-func play_animation(anim_name: String) -> void:
-	if animation_player == null:
+func play_animation(state_name: String) -> void:
+	if animation_tree == null:
+		return
+	if playback == null:
+		return
+	if current_anim == state_name:
 		return
 
-	if current_anim == anim_name:
-		return
+	current_anim = state_name
+	playback.travel(state_name)
 
-	current_anim = anim_name
-	animation_player.play(anim_name)
-	
 func update_health_bar() -> void:
 	if enemy_health_bar == null or health_component == null:
 		print("HEALTHBAR FAIL: enemy_health_bar eller health_component er null")
@@ -428,7 +417,7 @@ func give_rewards_to_player() -> void:
 
 	if inventory.has_method("add_coins"):
 		inventory.add_coins(coin_reward)
-	
+
 func spawn_loot() -> void:
 	if randf() > drop_chance:
 		print("No loot dropped")

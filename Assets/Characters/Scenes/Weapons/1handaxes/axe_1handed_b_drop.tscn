@@ -5,4 +5,4 @@
 [node name="Node3D" type="Node3D" unique_id=1739095021]
 
 [node name="axe_A2" parent="." unique_id=1022534643 instance=ExtResource("1_xroj1")]
-transform = Transform3D(-4.371139e-08, -1, 0, -4.371139e-08, 1.9106855e-15, -1, 1, -4.371139e-08, -4.371139e-08, 0, 0.05, 0)
+transform = Transform3D(-4.371139e-08, -1, 0, -4.371139e-08, 1.9106855e-15, -1, 1, -4.371139e-08, -4.371139e-08, 0, 0.1, 0)

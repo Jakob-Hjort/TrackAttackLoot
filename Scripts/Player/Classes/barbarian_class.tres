@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="CharacterClassData" format=3 uid="uid://csic2nwyy6qq7"]
+
+[ext_resource type="Script" uid="uid://dqef0wij2pkn5" path="res://Scripts/Player/CharacterClassData.gd" id="1_mvb7t"]
+
+[resource]
+script = ExtResource("1_mvb7t")
+allowed_weapon_families = Array[String](["axe", "shield"])
+metadata/_custom_type_script = "uid://dqef0wij2pkn5"

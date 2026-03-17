@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://20cf7288c84i"]
+
+[ext_resource type="PackedScene" uid="uid://dunoo6uglillc" path="res://Assets/Accessories/Player Accessories/shield_square.gltf" id="1_tp2s1"]
+
+[node name="shield_k_drop" type="Node3D" unique_id=1106966011]
+
+[node name="shield_square2" parent="." unique_id=1807904697 instance=ExtResource("1_tp2s1")]
+transform = Transform3D(-4.371139e-08, -1, 0, 1.1924881e-08, -5.2125306e-16, 1, -1, 4.371139e-08, 1.1924881e-08, 0, 0.2, 0)

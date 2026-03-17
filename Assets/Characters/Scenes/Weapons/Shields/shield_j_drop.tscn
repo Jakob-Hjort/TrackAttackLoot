@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://b2wcbij18kodg"]
+
+[ext_resource type="PackedScene" uid="uid://vmsft3r8781p" path="res://Assets/Accessories/Player Accessories/shield_spikes_color.gltf" id="1_lt8m1"]
+
+[node name="shield_j_drop" type="Node3D" unique_id=1048689103]
+
+[node name="shield_spikes_color2" parent="." unique_id=154470165 instance=ExtResource("1_lt8m1")]
+transform = Transform3D(-4.371139e-08, -1, 0, 1.1924881e-08, -5.2125306e-16, 1, -1, 4.371139e-08, 1.1924881e-08, 0, 0.2, 0)

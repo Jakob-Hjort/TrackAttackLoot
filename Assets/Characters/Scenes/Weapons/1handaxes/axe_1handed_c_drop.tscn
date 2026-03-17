@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://b76byew3mbh4w"]
+
+[ext_resource type="PackedScene" uid="uid://btq25vuulnln0" path="res://Assets/Accessories/Player Accessories/ekstra weapons/axe_C.gltf" id="1_8w7uo"]
+
+[node name="Node3D" type="Node3D" unique_id=395415439]
+
+[node name="axe_C2" parent="." unique_id=1665234998 instance=ExtResource("1_8w7uo")]
+transform = Transform3D(-4.371139e-08, -1, 0, -4.371139e-08, 1.9106855e-15, -1, 1, -4.371139e-08, -4.371139e-08, 0, 0.1, 0)
