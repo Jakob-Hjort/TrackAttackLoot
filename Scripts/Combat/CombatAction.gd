@@ -5,7 +5,11 @@ class_name CombatAction
 @export var display_name: String = ""
 
 @export var animation_name: String = ""
-@export var action_type: String = "auto" # auto / ability
+@export var action_type: String = "auto" # auto / ability / block / modified
+@export var icon: Texture2D
+
+@export var required_level: int = 1
+@export var show_in_hud: bool = true
 
 @export var stamina_cost: float = 0.0
 @export var mana_cost: float = 0.0

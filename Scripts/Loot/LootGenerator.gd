@@ -41,6 +41,28 @@ static var ITEM_VARIANTS := {
 			"icon": preload("res://UI/ICONS/generated/crossbow_2handed2.png"),
 		#	"mesh": preload("res://Assets/Characters/Scenes/Weapons/crossbow_a.tscn")
 		}
+	],
+	"health_potion": [
+		{
+			"id": "health_potion_small",
+			"name": "Small Health Potion",
+			"icon": preload("res://UI/ICONS/generated/potion_small_red2.png")
+		},
+		{
+			"id": "health_potion_medium",
+			"name": "Medium Health Potion",
+			"icon": preload("res://UI/ICONS/generated/potion_medium_red2.png")
+		},
+		{
+			"id": "health_potion_large",
+			"name": "Large Health Potion",
+			"icon": preload("res://UI/ICONS/generated/potion_large_red2.png")
+		},
+		{
+			"id": "health_potion_huge",
+			"name": "Huge Health Potion",
+			"icon": preload("res://UI/ICONS/generated/potion_huge_red2.png")
+		}
 	]
 }
 # =========================

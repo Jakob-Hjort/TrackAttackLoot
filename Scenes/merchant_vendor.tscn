@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bgbbty7g2oyxf"]
+
+[ext_resource type="Script" uid="uid://btexlkrsr18qu" path="res://Scenes/merchant_vendor.gd" id="1_le7h1"]
+[ext_resource type="PackedScene" uid="uid://wfaifknofugr" path="res://Assets/Characters/NPC/engineer.tscn" id="2_le7h1"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_le7h1"]
+height = 2.2
+radius = 3.0
+
+[node name="MerchantVendor" type="Node3D" unique_id=320384175]
+script = ExtResource("1_le7h1")
+
+[node name="VisualRoot" type="Node3D" parent="." unique_id=2042418952]
+
+[node name="Engineer" parent="VisualRoot" unique_id=1226626123 instance=ExtResource("2_le7h1")]
+
+[node name="InteractLabel" type="Label3D" parent="." unique_id=675961999]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+font_size = 61
+
+[node name="InteractionArea" type="Area3D" parent="." unique_id=1573435536]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea" unique_id=807673281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4033928, 0)
+shape = SubResource("CylinderShape3D_le7h1")

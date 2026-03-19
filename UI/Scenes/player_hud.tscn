@@ -55,13 +55,13 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xbu5o"]
-bg_color = Color(0.3154639, 0.59693503, 1, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ykipj"]
+bg_color = Color(0.37954542, 0.68562603, 0.9474264, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0, 0.30248353, 0.6574552, 1)
+border_color = Color(0.109777994, 0.42647302, 0.6638925, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -106,14 +106,32 @@ font_size = 12
 [sub_resource type="LabelSettings" id="LabelSettings_5m6qm"]
 font_size = 12
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xbu5o"]
+bg_color = Color(0.7451956, 0.6610063, 0.1854634, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.48143065, 0.42039767, 0.08607716, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_axhau"]
+line_spacing = 0.0
+font_size = 12
+shadow_size = 0
+
 [node name="PlayerHud" type="CanvasLayer" unique_id=1590374003]
 script = ExtResource("1_thblv")
 metadata/_edit_vertical_guides_ = [191.0, 224.0]
+metadata/_edit_horizontal_guides_ = [154.0]
 
 [node name="Control" type="Control" parent="." unique_id=116259559]
 layout_mode = 3
-anchor_right = 0.347
-anchor_bottom = 0.193
+anchor_right = 0.20715834
+anchor_bottom = 0.14172593
 offset_right = 0.25598145
 offset_bottom = -0.06400299
 grow_horizontal = 2
@@ -122,8 +140,8 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Panel" type="Panel" parent="Control" unique_id=1318707762]
 layout_mode = 0
-offset_right = 400.0
-offset_bottom = 120.0
+offset_right = 398.0
+offset_bottom = 154.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_ica2d")
 
 [node name="HealthBarContainer" type="Control" parent="Control" unique_id=54554988]
@@ -167,7 +185,7 @@ layout_mode = 0
 offset_right = 340.0
 offset_bottom = 25.0
 theme_override_styles/background = SubResource("StyleBoxFlat_y1ekg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_xbu5o")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ykipj")
 show_percentage = false
 
 [node name="ManaText" type="Label" parent="Control/ManaBarContainer" unique_id=1672283368]
@@ -182,18 +200,18 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="XpBarContainer" type="Control" parent="Control" unique_id=90856530]
-custom_minimum_size = Vector2(340, 10)
+custom_minimum_size = Vector2(340, 16)
 anchors_preset = 0
 offset_left = 55.0
-offset_top = 66.0
+offset_top = 98.0
 offset_right = 395.0
-offset_bottom = 76.0
+offset_bottom = 108.0
 
 [node name="XpBar" type="ProgressBar" parent="Control/XpBarContainer" unique_id=1968969035]
-custom_minimum_size = Vector2(340, 10)
+custom_minimum_size = Vector2(340, 16)
 layout_mode = 0
 offset_right = 340.0
-offset_bottom = 10.0
+offset_bottom = 16.0
 theme_override_font_sizes/font_size = 10
 theme_override_styles/background = SubResource("StyleBoxFlat_axhau")
 theme_override_styles/fill = SubResource("StyleBoxFlat_5m6qm")
@@ -227,15 +245,16 @@ vertical_alignment = 1
 
 [node name="Coin_Inventory" type="Control" parent="Control" unique_id=1457892084]
 anchors_preset = 0
-offset_left = 55.0
-offset_top = 84.0
-offset_right = 395.0
-offset_bottom = 121.0
+offset_left = 56.0
+offset_top = 117.0
+offset_right = 396.0
+offset_bottom = 154.0
 
 [node name="CoinIcon" type="TextureRect" parent="Control/Coin_Inventory" unique_id=1868986456]
 custom_minimum_size = Vector2(35, 35)
 layout_mode = 0
-offset_right = 35.0
+offset_left = 2.0
+offset_right = 37.0
 offset_bottom = 35.0
 texture = ExtResource("2_ica2d")
 expand_mode = 5
@@ -244,8 +263,8 @@ stretch_mode = 6
 [node name="CoinText" type="Label" parent="Control/Coin_Inventory" unique_id=495541560]
 custom_minimum_size = Vector2(50, 35)
 layout_mode = 0
-offset_left = 37.0
-offset_right = 87.0
+offset_left = 39.0
+offset_right = 89.0
 offset_bottom = 35.0
 label_settings = SubResource("LabelSettings_kdm15")
 vertical_alignment = 1
@@ -263,9 +282,356 @@ stretch_mode = 6
 [node name="InventoryText" type="Label" parent="Control/Coin_Inventory" unique_id=612327899]
 custom_minimum_size = Vector2(50, 35)
 layout_mode = 0
-offset_left = 215.0
-offset_top = 1.0
-offset_right = 265.0
-offset_bottom = 36.0
+offset_left = 204.0
+offset_right = 254.0
+offset_bottom = 35.0
 label_settings = SubResource("LabelSettings_5m6qm")
+vertical_alignment = 1
+
+[node name="StaminaBarContainer" type="Control" parent="Control" unique_id=1364520088]
+custom_minimum_size = Vector2(340, 25)
+anchors_preset = 0
+offset_left = 55.0
+offset_top = 66.0
+offset_right = 395.0
+offset_bottom = 91.0
+
+[node name="StaminaBar" type="ProgressBar" parent="Control/StaminaBarContainer" unique_id=313309828]
+custom_minimum_size = Vector2(340, 25)
+layout_mode = 0
+offset_right = 340.0
+offset_bottom = 25.0
+theme_override_styles/background = SubResource("StyleBoxFlat_y1ekg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_xbu5o")
+show_percentage = false
+
+[node name="StaminaText" type="Label" parent="Control/StaminaBarContainer" unique_id=1300972315]
+custom_minimum_size = Vector2(50, 23)
+layout_mode = 0
+offset_left = 144.0
+offset_top = 1.0
+offset_right = 194.0
+offset_bottom = 24.0
+label_settings = SubResource("LabelSettings_xbu5o")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AbilityBar" type="HBoxContainer" parent="Control" unique_id=1474373613]
+custom_minimum_size = Vector2(288, 0)
+layout_mode = 0
+offset_left = 816.0
+offset_top = 1000.0
+offset_right = 1104.0
+offset_bottom = 1064.0
+theme_override_constants/separation = 10
+
+[node name="Slot1" type="Panel" parent="Control/AbilityBar" unique_id=292697544]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="Border" type="Panel" parent="Control/AbilityBar/Slot1" unique_id=2118948327]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Icon" type="TextureRect" parent="Control/AbilityBar/Slot1" unique_id=769046992]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+expand_mode = 2
+stretch_mode = 5
+
+[node name="CooldownOverlay" type="ColorRect" parent="Control/AbilityBar/Slot1" unique_id=565224788]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="KeyLabel" type="Label" parent="Control/AbilityBar/Slot1" unique_id=2016897861]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 2.0
+offset_right = 15.0
+offset_bottom = 19.0
+text = "1"
+label_settings = SubResource("LabelSettings_axhau")
+
+[node name="NameLabel" type="Label" parent="Control/AbilityBar/Slot1" unique_id=1530663654]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="CooldownLabel" type="Label" parent="Control/AbilityBar/Slot1" unique_id=1091325751]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot2" type="Panel" parent="Control/AbilityBar" unique_id=1572408164]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="Border" type="Panel" parent="Control/AbilityBar/Slot2" unique_id=1164942145]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Icon" type="TextureRect" parent="Control/AbilityBar/Slot2" unique_id=317614454]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+expand_mode = 2
+stretch_mode = 5
+
+[node name="CooldownOverlay" type="ColorRect" parent="Control/AbilityBar/Slot2" unique_id=750023031]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="KeyLabel" type="Label" parent="Control/AbilityBar/Slot2" unique_id=740428216]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 2.0
+offset_right = 15.0
+offset_bottom = 19.0
+text = "2"
+label_settings = SubResource("LabelSettings_axhau")
+
+[node name="NameLabel" type="Label" parent="Control/AbilityBar/Slot2" unique_id=2093118010]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="CooldownLabel" type="Label" parent="Control/AbilityBar/Slot2" unique_id=1095843696]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot3" type="Panel" parent="Control/AbilityBar" unique_id=52550180]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="Border" type="Panel" parent="Control/AbilityBar/Slot3" unique_id=374794292]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Icon" type="TextureRect" parent="Control/AbilityBar/Slot3" unique_id=1967135045]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+expand_mode = 2
+stretch_mode = 5
+
+[node name="CooldownOverlay" type="ColorRect" parent="Control/AbilityBar/Slot3" unique_id=445970101]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="KeyLabel" type="Label" parent="Control/AbilityBar/Slot3" unique_id=1217731325]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 2.0
+offset_right = 15.0
+offset_bottom = 19.0
+text = "3"
+label_settings = SubResource("LabelSettings_axhau")
+
+[node name="NameLabel" type="Label" parent="Control/AbilityBar/Slot3" unique_id=1139357216]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="CooldownLabel" type="Label" parent="Control/AbilityBar/Slot3" unique_id=1181398933]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot4" type="Panel" parent="Control/AbilityBar" unique_id=2140197062]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="Border" type="Panel" parent="Control/AbilityBar/Slot4" unique_id=1246705520]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Icon" type="TextureRect" parent="Control/AbilityBar/Slot4" unique_id=2093614635]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+expand_mode = 2
+stretch_mode = 5
+
+[node name="CooldownOverlay" type="ColorRect" parent="Control/AbilityBar/Slot4" unique_id=991426115]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="KeyLabel" type="Label" parent="Control/AbilityBar/Slot4" unique_id=1765534466]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 2.0
+offset_right = 15.0
+offset_bottom = 19.0
+text = "4"
+label_settings = SubResource("LabelSettings_axhau")
+
+[node name="NameLabel" type="Label" parent="Control/AbilityBar/Slot4" unique_id=1773055943]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="CooldownLabel" type="Label" parent="Control/AbilityBar/Slot4" unique_id=1884999431]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PotionSlot" type="Panel" parent="Control" unique_id=1971726929]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+offset_left = 1014.0
+offset_top = 953.0
+offset_right = 1054.0
+offset_bottom = 993.0
+
+[node name="Border" type="Panel" parent="Control/PotionSlot" unique_id=1996687850]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Icon" type="TextureRect" parent="Control/PotionSlot" unique_id=2102138187]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+expand_mode = 2
+stretch_mode = 5
+
+[node name="CooldownOverlay" type="ColorRect" parent="Control/PotionSlot" unique_id=1920272023]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="KeyLabel" type="Label" parent="Control/PotionSlot" unique_id=853314465]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 2.0
+offset_right = 15.0
+offset_bottom = 19.0
+text = "R"
+label_settings = SubResource("LabelSettings_axhau")
+
+[node name="NameLabel" type="Label" parent="Control/PotionSlot" unique_id=2012992012]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="CooldownLabel" type="Label" parent="Control/PotionSlot" unique_id=1798406437]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
 vertical_alignment = 1

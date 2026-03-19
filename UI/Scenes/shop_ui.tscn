@@ -1,0 +1,326 @@
+[gd_scene format=3 uid="uid://dahrnw4t1d260"]
+
+[ext_resource type="Script" uid="uid://dpd5iyybg8uur" path="res://UI/Scenes/shop_ui.gd" id="1_o86hy"]
+[ext_resource type="StyleBox" uid="uid://djm1hs0n66x4c" path="res://UI/Scenes/OuterPanel.tres" id="2_mi26u"]
+[ext_resource type="StyleBox" uid="uid://cpynb8koa8vpm" path="res://UI/Scenes/InnerPanel_ui.tres" id="3_mcxur"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6eh17"]
+bg_color = Color(0.16470589, 0.18431373, 0.21960784, 1)
+
+[node name="ShopUIRoot" type="CanvasLayer" unique_id=791088225 groups=["inventory_ui"]]
+script = ExtResource("1_o86hy")
+
+[node name="ShopUI" type="Control" parent="." unique_id=1501875188]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="ShopUI" unique_id=679708071]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.35000002)
+
+[node name="Panel" type="Panel" parent="ShopUI" unique_id=1612835090]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -600.0
+offset_top = -340.0
+offset_right = 600.0
+offset_bottom = 340.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_6eh17")
+
+[node name="MarginContainer" type="MarginContainer" parent="ShopUI/Panel" unique_id=1298080004]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ShopUI/Panel/MarginContainer" unique_id=719240983]
+layout_mode = 2
+
+[node name="TopBar" type="HBoxContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer" unique_id=111523869]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/TopBar" unique_id=1703075076]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
+text = "Merchant"
+
+[node name="Spacer" type="Control" parent="ShopUI/Panel/MarginContainer/VBoxContainer/TopBar" unique_id=1069193659]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ShopcoinsLabel" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/TopBar" unique_id=1115008225]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
+text = "Mechant has 0 coins"
+
+[node name="CoinsLabel" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/TopBar" unique_id=403948576]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
+text = "You have 0 coins"
+
+[node name="Closebutton" type="Button" parent="ShopUI/Panel/MarginContainer/VBoxContainer/TopBar" unique_id=340599]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
+text = "X"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer" unique_id=142027766]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="BuyPanel" type="Panel" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=770086825]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_mi26u")
+
+[node name="BuyInnerPanel" type="Panel" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel" unique_id=116001891]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+theme_override_styles/panel = ExtResource("3_mcxur")
+
+[node name="BuyMargin" type="MarginContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel" unique_id=1775307885]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="BuyItemVbox" type="VBoxContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin" unique_id=844441252]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BuyTitle" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox" unique_id=60199800]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
+text = "Buy Section"
+
+[node name="PotionSmallRow" type="HBoxContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox" unique_id=1150774578]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PotionSmallIcon" type="TextureRect" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox/PotionSmallRow" unique_id=1879051646]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+expand_mode = 3
+stretch_mode = 5
+
+[node name="PotionSmallText" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox/PotionSmallRow" unique_id=246301344]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Small Health Potion - 10 g"
+
+[node name="PotionSmallBuyButton" type="Button" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox/PotionSmallRow" unique_id=222535936]
+custom_minimum_size = Vector2(72, 32)
+layout_mode = 2
+text = "Buy"
+
+[node name="PotionMediumRow" type="HBoxContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox" unique_id=2056902869]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PotionMediumIcon" type="TextureRect" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox/PotionMediumRow" unique_id=1089488063]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+expand_mode = 3
+stretch_mode = 5
+
+[node name="PotionMediumText" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox/PotionMediumRow" unique_id=1815504788]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Small Health Potion - 10 g"
+
+[node name="PotionMediumBuyButton" type="Button" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox/PotionMediumRow" unique_id=1525438935]
+custom_minimum_size = Vector2(72, 32)
+layout_mode = 2
+text = "Buy"
+
+[node name="PotionLargeRow" type="HBoxContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox" unique_id=1252947093]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PotionLargeIcon" type="TextureRect" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox/PotionLargeRow" unique_id=123012166]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+expand_mode = 3
+stretch_mode = 5
+
+[node name="PotionLargeText" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox/PotionLargeRow" unique_id=1245529925]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Small Health Potion - 10 g"
+
+[node name="PotionLargeBuyButton" type="Button" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox/PotionLargeRow" unique_id=1963385904]
+custom_minimum_size = Vector2(72, 32)
+layout_mode = 2
+text = "Buy"
+
+[node name="PotionHugeRow" type="HBoxContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox" unique_id=873188392]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PotionHugeIcon" type="TextureRect" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox/PotionHugeRow" unique_id=1743181039]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+expand_mode = 3
+stretch_mode = 5
+
+[node name="PotionHugeText" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox/PotionHugeRow" unique_id=479457042]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Small Health Potion - 10 g"
+
+[node name="PotionHugeBuyButton" type="Button" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/BuyPanel/BuyInnerPanel/BuyMargin/BuyItemVbox/PotionHugeRow" unique_id=1656849187]
+custom_minimum_size = Vector2(72, 32)
+layout_mode = 2
+text = "Buy"
+
+[node name="VSeparator" type="VSeparator" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=62717759]
+layout_mode = 2
+
+[node name="SellPanel" type="Panel" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=259765375]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("2_mi26u")
+
+[node name="SellInnerPanel" type="Panel" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SellPanel" unique_id=1376132768]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+theme_override_styles/panel = ExtResource("3_mcxur")
+
+[node name="SellMargin" type="MarginContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SellPanel/SellInnerPanel" unique_id=665445796]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="SellVBoxContainer" type="VBoxContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SellPanel/SellInnerPanel/SellMargin" unique_id=1071540925]
+layout_mode = 2
+
+[node name="SellTitle" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SellPanel/SellInnerPanel/SellMargin/SellVBoxContainer" unique_id=1144244290]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
+text = "Inventory"
+
+[node name="SellGrid" type="GridContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SellPanel/SellInnerPanel/SellMargin/SellVBoxContainer" unique_id=37582559]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 6
+
+[node name="VSeparator2" type="VSeparator" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1216658340]
+layout_mode = 2
+
+[node name="SelectedPanel" type="Panel" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1860913855]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_mi26u")
+
+[node name="SelectedInnerPanel" type="Panel" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SelectedPanel" unique_id=44521799]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+theme_override_styles/panel = ExtResource("3_mcxur")
+
+[node name="DetailMargin" type="MarginContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SelectedPanel/SelectedInnerPanel" unique_id=878052895]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="DetailVbox" type="VBoxContainer" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SelectedPanel/SelectedInnerPanel/DetailMargin" unique_id=1931329977]
+layout_mode = 2
+
+[node name="DetailTitle" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SelectedPanel/SelectedInnerPanel/DetailMargin/DetailVbox" unique_id=1771667049]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
+text = "Details"
+
+[node name="DetailRarity" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SelectedPanel/SelectedInnerPanel/DetailMargin/DetailVbox" unique_id=1358748918]
+layout_mode = 2
+
+[node name="DetailType" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SelectedPanel/SelectedInnerPanel/DetailMargin/DetailVbox" unique_id=42507950]
+layout_mode = 2
+
+[node name="DetailStats" type="RichTextLabel" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SelectedPanel/SelectedInnerPanel/DetailMargin/DetailVbox" unique_id=4075742]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+
+[node name="Spacer" type="Control" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SelectedPanel/SelectedInnerPanel/DetailMargin/DetailVbox" unique_id=110141418]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DetailActionButton" type="Button" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SelectedPanel/SelectedInnerPanel/DetailMargin/DetailVbox" unique_id=2138853268]
+layout_mode = 2
+text = "Sell"
+
+[node name="DetailInfoLabel" type="Label" parent="ShopUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SelectedPanel/SelectedInnerPanel/DetailMargin/DetailVbox" unique_id=1758739350]
+layout_mode = 2

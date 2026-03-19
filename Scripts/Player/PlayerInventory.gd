@@ -7,12 +7,13 @@ signal coins_changed(new_amount)
 signal xp_changed(current_xp, level)
 signal equipment_changed()
 signal stats_changed()
+signal active_potion_changed(item_data)
 
 @export var character_class: CharacterClassData
 
 @export var coins: int = 0
 @export var xp: int = 0
-@export var level: int = 1
+@export var level: int = 5
 
 @export var base_max_health: int = 100
 @export var base_damage: int = 5
@@ -26,6 +27,9 @@ var items: Array[ItemData] = []
 
 var equipped_main_hand: ItemData = null
 var equipped_off_hand: ItemData = null
+
+var active_health_potion: ItemData = null
+
 
 func add_item(item_data: ItemData) -> void:
 	if item_data == null:
@@ -43,6 +47,10 @@ func add_item(item_data: ItemData) -> void:
 				print("STACKED ITEM:")
 				print(existing_item.get_display_text())
 
+				if is_health_potion(existing_item) and active_health_potion == null:
+					active_health_potion = existing_item
+					active_potion_changed.emit(active_health_potion)
+
 				item_added.emit(existing_item)
 				inventory_changed.emit()
 				return
@@ -51,16 +59,23 @@ func add_item(item_data: ItemData) -> void:
 	print("ITEM ADDED TO INVENTORY:")
 	print(item_data.get_display_text())
 
+	if is_health_potion(item_data) and active_health_potion == null:
+		active_health_potion = item_data
+		active_potion_changed.emit(active_health_potion)
+
 	item_added.emit(item_data)
 	inventory_changed.emit()
+
 
 func add_coins(amount: int) -> void:
 	coins += amount
 	print("COINS:", coins)
 	coins_changed.emit(coins)
 
+
 func can_upgrade_inventory(cost: int) -> bool:
 	return coins >= cost
+
 
 func upgrade_inventory(cost: int, slot_increase: int = 5) -> bool:
 	if coins < cost:
@@ -72,6 +87,7 @@ func upgrade_inventory(cost: int, slot_increase: int = 5) -> bool:
 	coins_changed.emit(coins)
 	inventory_changed.emit()
 	return true
+
 
 func add_xp(amount: int) -> void:
 	xp += amount
@@ -86,14 +102,18 @@ func add_xp(amount: int) -> void:
 	xp_changed.emit(xp, level)
 	stats_changed.emit()
 
+
 func get_xp_to_next_level() -> int:
 	return level * 100
+
 
 func get_item_count() -> int:
 	return items.size()
 
+
 func is_off_hand_blocked() -> bool:
 	return equipped_main_hand != null and equipped_main_hand.is_two_handed
+
 
 # ==================================================
 # CLASS / EQUIP RULES
@@ -102,18 +122,15 @@ func can_class_use_item(item_data: ItemData) -> bool:
 	if item_data == null:
 		return false
 
-	# Hvis ingen class er sat endnu, tillad alt midlertidigt
 	if character_class == null:
 		return true
 
-	# Våbenfamilie-check
 	if item_data.weapon_family != "":
 		if character_class.allowed_weapon_families.size() > 0:
 			if not character_class.allowed_weapon_families.has(item_data.weapon_family):
 				print("CLASS RESTRICTION: ", character_class.display_name, " cannot use family: ", item_data.weapon_family)
 				return false
 
-	# Slot / type checks
 	match item_data.equip_slot:
 		"weapon":
 			if item_data.is_two_handed:
@@ -132,25 +149,24 @@ func can_class_use_item(item_data: ItemData) -> bool:
 
 	return true
 
+
 func can_equip_in_offhand(item_data: ItemData) -> bool:
 	if item_data == null:
 		return false
 
-	# 2H må aldrig i offhand
 	if item_data.is_two_handed:
 		return false
 
-	# Shield må gerne i offhand hvis classen tillader shield
 	if item_data.equip_slot == "shield":
 		return true
 
-	# 1H weapon i offhand kræver dual wield
 	if item_data.equip_slot == "weapon":
 		if character_class == null:
 			return false
 		return character_class.allow_dual_wield
 
 	return false
+
 
 # ==================================================
 # EQUIP
@@ -165,15 +181,12 @@ func equip_item(item_data: ItemData) -> void:
 
 	match item_data.equip_slot:
 		"weapon":
-			# Hvis main hand er tom, så equip der først
 			if equipped_main_hand == null:
 				_equip_main_hand(item_data)
 			else:
-				# Hvis offhand er tom og item må være der, prøv offhand
 				if equipped_off_hand == null and can_equip_in_offhand(item_data) and not is_off_hand_blocked():
 					_equip_off_hand(item_data)
 				else:
-					# ellers erstat main hand
 					_equip_main_hand(item_data)
 
 		"shield":
@@ -187,6 +200,7 @@ func equip_item(item_data: ItemData) -> void:
 	inventory_changed.emit()
 	stats_changed.emit()
 
+
 func _equip_main_hand(item_data: ItemData) -> void:
 	if item_data == null:
 		return
@@ -194,12 +208,10 @@ func _equip_main_hand(item_data: ItemData) -> void:
 	if not can_class_use_item(item_data):
 		return
 
-	# Hvis det nye item er 2H, så skal off-hand tømmes
 	if item_data.is_two_handed and equipped_off_hand != null:
 		items.append(equipped_off_hand)
 		equipped_off_hand = null
 
-	# Gammelt main-hand item tilbage i inventory
 	if equipped_main_hand != null:
 		items.append(equipped_main_hand)
 
@@ -210,6 +222,7 @@ func _equip_main_hand(item_data: ItemData) -> void:
 	print("DROP MESH:", equipped_main_hand.drop_mesh_scene)
 
 	items.erase(item_data)
+
 
 func _equip_off_hand(item_data: ItemData) -> void:
 	if item_data == null:
@@ -234,6 +247,7 @@ func _equip_off_hand(item_data: ItemData) -> void:
 
 	print("EQUIPPED OFF HAND:", equipped_off_hand.item_name)
 
+
 func unequip_main_hand() -> void:
 	if equipped_main_hand == null:
 		return
@@ -244,6 +258,7 @@ func unequip_main_hand() -> void:
 	equipment_changed.emit()
 	inventory_changed.emit()
 	stats_changed.emit()
+
 
 func unequip_off_hand() -> void:
 	if equipped_off_hand == null:
@@ -256,11 +271,13 @@ func unequip_off_hand() -> void:
 	inventory_changed.emit()
 	stats_changed.emit()
 
+
 func is_item_equipped(item_data: ItemData) -> bool:
 	if item_data == null:
 		return false
 
 	return equipped_main_hand == item_data or equipped_off_hand == item_data
+
 
 func unequip_item(item_data: ItemData) -> void:
 	if item_data == null:
@@ -273,6 +290,81 @@ func unequip_item(item_data: ItemData) -> void:
 	if equipped_off_hand == item_data:
 		unequip_off_hand()
 		return
+
+
+# ==================================================
+# POTIONS
+# ==================================================
+func is_health_potion(item_data: ItemData) -> bool:
+	if item_data == null:
+		return false
+	return item_data.item_type == "health_potion"
+
+
+func get_health_potions() -> Array[ItemData]:
+	var result: Array[ItemData] = []
+
+	for item in items:
+		if is_health_potion(item):
+			result.append(item)
+
+	return result
+
+
+func get_active_health_potion() -> ItemData:
+	if active_health_potion != null and items.has(active_health_potion) and is_health_potion(active_health_potion):
+		return active_health_potion
+
+	var potions := get_health_potions()
+	if potions.is_empty():
+		active_health_potion = null
+		return null
+
+	active_health_potion = potions[0]
+	return active_health_potion
+
+
+func set_active_health_potion(item_data: ItemData) -> void:
+	if item_data == null or not items.has(item_data) or not is_health_potion(item_data):
+		active_health_potion = null
+		active_potion_changed.emit(active_health_potion)
+		return
+
+	active_health_potion = item_data
+	active_potion_changed.emit(active_health_potion)
+
+
+func cycle_next_health_potion() -> void:
+	var potions := get_health_potions()
+	if potions.is_empty():
+		active_health_potion = null
+		active_potion_changed.emit(active_health_potion)
+		return
+
+	var current := get_active_health_potion()
+	if current == null:
+		active_health_potion = potions[0]
+		active_potion_changed.emit(active_health_potion)
+		return
+
+	var index := potions.find(current)
+	if index == -1:
+		active_health_potion = potions[0]
+	else:
+		index = (index + 1) % potions.size()
+		active_health_potion = potions[index]
+
+	active_potion_changed.emit(active_health_potion)
+
+
+func use_active_health_potion() -> void:
+	var potion := get_active_health_potion()
+	if potion == null:
+		print("No active health potion")
+		return
+
+	use_item(potion)
+
 
 # ==================================================
 # USE ITEM
@@ -292,14 +384,19 @@ func use_item(item_data: ItemData) -> void:
 				item_data.quantity -= 1
 			else:
 				items.erase(item_data)
+				if active_health_potion == item_data:
+					active_health_potion = null
 
 			print("USED POTION:", item_data.get_display_text())
 
+			get_active_health_potion()
+			active_potion_changed.emit(active_health_potion)
 			inventory_changed.emit()
 			stats_changed.emit()
 
 		_:
 			print("Item cannot be used directly:", item_data.item_name)
+
 
 # ==================================================
 # LEVEL / STATS
@@ -310,6 +407,7 @@ func apply_level_up_stats() -> void:
 
 	if level % 2 == 0:
 		base_defense += 1
+
 
 func get_total_stats() -> Dictionary:
 	var total := {
@@ -328,11 +426,13 @@ func get_total_stats() -> Dictionary:
 
 	return total
 
+
 func _add_item_stats_to_total(item_data: ItemData, total: Dictionary) -> void:
 	for key in item_data.stats.keys():
 		if not total.has(key):
 			total[key] = 0
 		total[key] += item_data.stats[key]
+
 
 # ==================================================
 # DEBUG
@@ -366,3 +466,9 @@ func debug_print_inventory() -> void:
 	for i in range(items.size()):
 		var item: ItemData = items[i]
 		print(str(i + 1) + ".", item.get_display_text())
+
+	var potion := get_active_health_potion()
+	if potion != null:
+		print("Active potion:", potion.get_display_text())
+	else:
+		print("Active potion: none")

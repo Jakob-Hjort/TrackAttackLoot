@@ -1,12 +1,11 @@
 [gd_scene format=3 uid="uid://dkru5078s3nou"]
 
 [ext_resource type="Script" uid="uid://1pjegbgrvcky" path="res://UI/Scenes/inventory_ui.gd" id="1_i38fw"]
+[ext_resource type="StyleBox" uid="uid://djm1hs0n66x4c" path="res://UI/Scenes/OuterPanel.tres" id="2_dnfqj"]
+[ext_resource type="StyleBox" uid="uid://cpynb8koa8vpm" path="res://UI/Scenes/InnerPanel_ui.tres" id="3_n5km0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6eh17"]
 bg_color = Color(0.16470589, 0.18431373, 0.21960784, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vrioc"]
-bg_color = Color(0.13725491, 0.15686275, 0.2, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mftax"]
 bg_color = Color(0.08627451, 0.09803922, 0.12156863, 1)
@@ -20,6 +19,8 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dnfqj"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nghe3"]
 bg_color = Color(0.08627451, 0.09803922, 0.12156863, 1)
 border_width_left = 4
@@ -31,12 +32,6 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gw0fv"]
-bg_color = Color(0.13725491, 0.15686275, 0.2, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vohug"]
-bg_color = Color(0.13725491, 0.15686275, 0.2, 1)
 
 [node name="InventoryUIRoot" type="CanvasLayer" unique_id=791088225 groups=["inventory_ui"]]
 script = ExtResource("1_i38fw")
@@ -117,14 +112,26 @@ text = "X"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer" unique_id=142027766]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 16
 
 [node name="CharacterPanel" type="Panel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=770086825]
-custom_minimum_size = Vector2(260, 0)
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_vrioc")
+theme_override_styles/panel = ExtResource("2_dnfqj")
 
-[node name="CharacterMargin" type="MarginContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel" unique_id=1775307885]
+[node name="CharacterInnerPanel" type="Panel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel" unique_id=1691442426]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+theme_override_styles/panel = ExtResource("3_n5km0")
+
+[node name="CharacterMargin" type="MarginContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel" unique_id=1775307885]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -134,35 +141,46 @@ offset_top = 10.0
 offset_right = -10.0
 offset_bottom = -10.0
 
-[node name="CharacterVbox" type="VBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin" unique_id=844441252]
+[node name="CharacterVbox" type="VBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin" unique_id=844441252]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="CharacterTitle" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox" unique_id=60199800]
+[node name="CharacterTitle" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox" unique_id=60199800]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
 text = "Character"
 
-[node name="HandsRow" type="HBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox" unique_id=896045444]
+[node name="HandsRow" type="GridContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox" unique_id=991692427]
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
-theme_override_constants/separation = 20
+columns = 2
 
-[node name="MainHandGroup" type="VBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox/HandsRow" unique_id=337358006]
+[node name="MainHandGroup" type="VBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow" unique_id=337358006]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="MainHandLabel" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox/HandsRow/MainHandGroup" unique_id=254426415]
+[node name="VBoxContainer" type="VBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow/MainHandGroup" unique_id=425968562]
+layout_mode = 2
+
+[node name="MainHandLabel" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow/MainHandGroup/VBoxContainer" unique_id=254426415]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
 text = "Mainhand"
 horizontal_alignment = 1
 
-[node name="MainHandSlot" type="Panel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox/HandsRow/MainHandGroup" unique_id=447961992]
-custom_minimum_size = Vector2(92, 92)
+[node name="MainHandLabel2" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow/MainHandGroup/VBoxContainer" unique_id=179374597]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
+
+[node name="MainHandSlot" type="Panel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow/MainHandGroup" unique_id=447961992]
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_mftax")
 
-[node name="MainHandIcon" type="TextureRect" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox/HandsRow/MainHandGroup/MainHandSlot" unique_id=597392599]
+[node name="MainHandIcon" type="TextureRect" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow/MainHandGroup/MainHandSlot" unique_id=597392599]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -177,7 +195,7 @@ mouse_filter = 2
 expand_mode = 5
 stretch_mode = 5
 
-[node name="MainHandButton" type="Button" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox/HandsRow/MainHandGroup/MainHandSlot" unique_id=1889755474]
+[node name="MainHandButton" type="Button" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow/MainHandGroup/MainHandSlot" unique_id=1889755474]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -187,22 +205,35 @@ grow_vertical = 2
 focus_mode = 0
 flat = true
 
-[node name="OffhandGroup" type="VBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox/HandsRow" unique_id=1973396552]
+[node name="OffhandGroup" type="VBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow" unique_id=1973396552]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="OffHandLabel" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox/HandsRow/OffhandGroup" unique_id=1295962417]
+[node name="VBoxContainer" type="VBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow/OffhandGroup" unique_id=1727457131]
+layout_mode = 2
+
+[node name="OffHandLabel" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow/OffhandGroup/VBoxContainer" unique_id=1295962417]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
 text = "Offhand"
 horizontal_alignment = 1
 
-[node name="OffHandSlot" type="Panel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox/HandsRow/OffhandGroup" unique_id=1074997890]
-custom_minimum_size = Vector2(92, 92)
+[node name="OffHandBlockedLabel" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow/OffhandGroup/VBoxContainer" unique_id=1132900939]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.99999994, 0.23375854, 0.27131623, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxEmpty_dnfqj")
+text = "Blocked"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OffHandSlot" type="Panel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow/OffhandGroup" unique_id=1074997890]
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_nghe3")
 
-[node name="OffHandIcon" type="TextureRect" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox/HandsRow/OffhandGroup/OffHandSlot" unique_id=1962940554]
+[node name="OffHandIcon" type="TextureRect" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow/OffhandGroup/OffHandSlot" unique_id=1962940554]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -217,7 +248,7 @@ mouse_filter = 2
 expand_mode = 5
 stretch_mode = 6
 
-[node name="OffHandButton" type="Button" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox/HandsRow/OffhandGroup/OffHandSlot" unique_id=1169612222]
+[node name="OffHandButton" type="Button" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox/HandsRow/OffhandGroup/OffHandSlot" unique_id=1169612222]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -227,12 +258,12 @@ grow_vertical = 2
 focus_mode = 0
 flat = true
 
-[node name="StatsTitle" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox" unique_id=244577578]
+[node name="StatsTitle" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox" unique_id=244577578]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
 text = "Stats"
 
-[node name="StatsText" type="RichTextLabel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterMargin/CharacterVbox" unique_id=151714272]
+[node name="StatsText" type="RichTextLabel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/CharacterPanel/CharacterInnerPanel/CharacterMargin/CharacterVbox" unique_id=151714272]
 custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
@@ -244,73 +275,119 @@ Attack Speed: 0"
 fit_content = true
 scroll_active = false
 
+[node name="SepWrap1" type="MarginContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=214024497]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VSeparator" type="VSeparator" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SepWrap1" unique_id=1897402505]
+layout_mode = 2
+
 [node name="InventoryPanel" type="Panel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=259765375]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_gw0fv")
+theme_override_styles/panel = ExtResource("2_dnfqj")
 
-[node name="InventoryMargin" type="MarginContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/InventoryPanel" unique_id=665445796]
+[node name="InventoryInnerPanel" type="Panel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/InventoryPanel" unique_id=677484809]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("3_n5km0")
+
+[node name="InventoryMargin" type="MarginContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/InventoryPanel/InventoryInnerPanel" unique_id=665445796]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 14.0
 offset_top = 12.0
-offset_right = -14.0
-offset_bottom = -12.0
+offset_right = 49.0
+offset_bottom = -1.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/InventoryPanel/InventoryMargin" unique_id=1071540925]
+[node name="VBoxContainer" type="VBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/InventoryPanel/InventoryInnerPanel/InventoryMargin" unique_id=1071540925]
 layout_mode = 2
 
-[node name="InventoryTitle" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/InventoryPanel/InventoryMargin/VBoxContainer" unique_id=1144244290]
+[node name="InventoryTitle" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/InventoryPanel/InventoryInnerPanel/InventoryMargin/VBoxContainer" unique_id=1144244290]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
 text = "Inventory"
 
-[node name="InventoryGrid" type="GridContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/InventoryPanel/InventoryMargin/VBoxContainer" unique_id=37582559]
+[node name="InventoryGrid" type="GridContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/InventoryPanel/InventoryInnerPanel/InventoryMargin/VBoxContainer" unique_id=37582559]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 6
 theme_override_constants/v_separation = 6
 columns = 7
 
+[node name="SepWrap2" type="MarginContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=171395305]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VSeparator2" type="VSeparator" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/SepWrap2" unique_id=467606067]
+layout_mode = 2
+
 [node name="DetailPanel" type="Panel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1860913855]
 custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_vohug")
+theme_override_styles/panel = ExtResource("2_dnfqj")
 
-[node name="DetailMargin" type="MarginContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel" unique_id=878052895]
+[node name="DetailInnerPanel" type="Panel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel" unique_id=1237129792]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = -10.0
-offset_bottom = -10.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+theme_override_styles/panel = ExtResource("3_n5km0")
 
-[node name="DetailVbox" type="VBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailMargin" unique_id=1931329977]
+[node name="DetailMargin" type="MarginContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailInnerPanel" unique_id=878052895]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="DetailVbox" type="VBoxContainer" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailInnerPanel/DetailMargin" unique_id=1931329977]
 layout_mode = 2
 
-[node name="DetailTitle" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailMargin/DetailVbox" unique_id=1771667049]
+[node name="DetailTitle" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailInnerPanel/DetailMargin/DetailVbox" unique_id=1771667049]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.90588236, 0.9254902, 0.9529412, 1)
 text = "Details"
 
-[node name="DetailRarity" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailMargin/DetailVbox" unique_id=1358748918]
+[node name="DetailRarity" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailInnerPanel/DetailMargin/DetailVbox" unique_id=1358748918]
 layout_mode = 2
 
-[node name="DetailType" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailMargin/DetailVbox" unique_id=42507950]
+[node name="DetailType" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailInnerPanel/DetailMargin/DetailVbox" unique_id=42507950]
 layout_mode = 2
 
-[node name="DetailStats" type="RichTextLabel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailMargin/DetailVbox" unique_id=4075742]
+[node name="DetailStats" type="RichTextLabel" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailInnerPanel/DetailMargin/DetailVbox" unique_id=4075742]
 layout_mode = 2
 fit_content = true
 scroll_active = false
 
-[node name="DetailActionButton" type="Button" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailMargin/DetailVbox" unique_id=2138853268]
+[node name="Spacer" type="Control" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailInnerPanel/DetailMargin/DetailVbox" unique_id=1325628707]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DetailActionButton" type="Button" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailInnerPanel/DetailMargin/DetailVbox" unique_id=2138853268]
 layout_mode = 2
 text = "Equip"
 
-[node name="DetailInfoLabel" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailMargin/DetailVbox" unique_id=1758739350]
+[node name="DetailInfoLabel" type="Label" parent="InventoryUI/Panel/MarginContainer/VBoxContainer/HBoxContainer/DetailPanel/DetailInnerPanel/DetailMargin/DetailVbox" unique_id=1758739350]
 layout_mode = 2

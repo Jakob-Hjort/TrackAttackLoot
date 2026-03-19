@@ -61,6 +61,16 @@ var attack_move_multiplier := 0.35
 var attack_turn_multiplier := 0.45
 var combat_action_token: int = 0
 
+var max_stamina: float = 100.0
+var current_stamina: float = 100.0
+var stamina_regen_per_second: float = 18.0
+
+var max_mana: float = 50.0
+var current_mana: float = 50.0
+var mana_regen_per_second: float = 8.0
+
+var action_cooldowns: Dictionary = {}
+
 var locomotion_blend_pos: Vector2 = Vector2.ZERO
 
 # ==================================================
@@ -76,7 +86,6 @@ var shield_block_area: ShieldBlock = null
 # ==================================================
 # COMBAT PROFILES
 # ==================================================
-var current_attack_index: int = 0
 
 var unarmed_profile: CombatProfile
 var one_handed_profile: CombatProfile
@@ -155,6 +164,9 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 
+	_update_resource_regen(delta)
+	_update_cooldowns(delta)
+
 	if inventory_ui != null and inventory_ui.visible:
 		stop_block()
 
@@ -188,6 +200,30 @@ func _physics_process(delta: float) -> void:
 			start_shield_attack()
 		elif not is_blocking:
 			start_attack()
+
+	if Input.is_action_just_pressed("ability_1") and not is_attacking:
+		print("ABILITY 1 PRESSED")
+		start_style_ability(0)
+
+	if Input.is_action_just_pressed("ability_2") and not is_attacking:
+		print("ABILITY 2 PRESSED")
+		start_style_ability(1)
+
+	if Input.is_action_just_pressed("ability_3") and not is_attacking:
+		print("ABILITY 3 PRESSED")
+		start_style_ability(2)
+
+	if Input.is_action_just_pressed("ability_4") and not is_attacking:
+		print("ABILITY 4 PRESSED")
+		start_style_ability(3)
+		
+	if Input.is_action_just_pressed("use_potion"):
+		if inventory != null:
+			inventory.use_active_health_potion()
+
+	if Input.is_action_just_pressed("cycle_potion"):
+		if inventory != null:
+			inventory.cycle_next_health_potion()
 
 	var input_vector := Input.get_vector("left", "right", "down", "up")
 
@@ -224,8 +260,6 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, applied_speed)
 		velocity.z = move_toward(velocity.z, 0.0, applied_speed)
 
-	#var backward_only: bool = input_vector.y < 0.0 and abs(input_vector.x) < 0.1
-
 	if move_direction != Vector3.ZERO:
 		var target_rotation := atan2(forward.x, forward.z)
 		var turn_speed := ROTATION_SPEED
@@ -238,7 +272,7 @@ func _physics_process(delta: float) -> void:
 			barbarian.rotation.y,
 			target_rotation,
 			turn_speed * delta
-	)
+		)
 
 	move_and_slide()
 
@@ -255,6 +289,28 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_page_down"):
 		if inventory and inventory.has_method("debug_print_inventory"):
 			inventory.debug_print_inventory()
+
+func get_player_level() -> int:
+	if inventory == null:
+		return 1
+	return max(inventory.level, 1)
+
+func get_unlocked_abilities() -> Array[CombatAction]:
+	var result: Array[CombatAction] = []
+	var profile := get_current_combat_profile()
+
+	if profile == null:
+		return result
+
+	var player_level := get_player_level()
+
+	for action in profile.abilities:
+		if action == null:
+			continue
+		if player_level >= action.required_level:
+			result.append(action)
+
+	return result
 
 # ==================================================
 # COMBAT STYLE
@@ -274,31 +330,39 @@ func start_attack() -> void:
 		print("ATTACK FAIL: no auto attack action for current style")
 		return
 
-	_advance_auto_attack_index()
 	execute_combat_action(action)
 
 func start_shield_attack() -> void:
-	var action := get_ability_action(0)
+	var profile := get_current_combat_profile()
+	if profile == null:
+		return
+
+	var action := profile.modified_attack_action
 	if action == null:
-		print("SHIELD ATTACK FAIL: no ability action for current style")
+		print("SHIELD ATTACK FAIL: no modified attack action for current style")
 		return
 
 	execute_combat_action(action)
 
 func get_ability_action(slot_index: int) -> CombatAction:
-	var profile := get_current_combat_profile()
-	if profile == null:
+	var abilities := get_unlocked_abilities()
+
+	if slot_index < 0 or slot_index >= abilities.size():
 		return null
 
-	if slot_index < 0 or slot_index >= profile.abilities.size():
-		return null
-
-	return profile.abilities[slot_index]
+	return abilities[slot_index]
 
 func execute_combat_action(action: CombatAction) -> void:
 	if action == null:
 		return
 	if is_dead or is_attacking:
+		return
+
+	if _is_action_on_cooldown(action):
+		print("ACTION FAIL: cooldown active for:", action.action_id)
+		return
+
+	if not _has_enough_resources_for_action(action):
 		return
 
 	combat_action_token += 1
@@ -312,6 +376,9 @@ func execute_combat_action(action: CombatAction) -> void:
 		print("ATTACK FAIL: no hitbox for style:", style, " action:", action.action_id)
 		return
 
+	_consume_action_costs(action)
+	_start_action_cooldown(action)
+
 	stop_block()
 
 	is_attacking = true
@@ -322,7 +389,18 @@ func execute_combat_action(action: CombatAction) -> void:
 
 	play_animation(action.animation_name)
 
-	print("PLAYER ACTION START:", action.animation_name, " style:", style, " action:", action.action_id)
+	print(
+		"PLAYER ACTION START:",
+		action.animation_name,
+		" style:",
+		style,
+		" action:",
+		action.action_id,
+		" stamina:",
+		current_stamina,
+		" mana:",
+		current_mana
+	)
 
 	await get_tree().create_timer(action.hitbox_time / atk_speed).timeout
 	if my_token != combat_action_token:
@@ -348,6 +426,17 @@ func execute_combat_action(action: CombatAction) -> void:
 	is_attacking = false
 	current_anim = ""
 
+func start_style_ability(slot_index: int) -> void:
+	if is_dead:
+		return
+
+	var action := get_ability_action(slot_index)
+	if action == null:
+		print("ABILITY FAIL: no ability in slot:", slot_index, " for style:", get_combat_style())
+		return
+
+	execute_combat_action(action)
+
 func attack_hitbox_on_for_action(action: CombatAction) -> void:
 	var hitbox := _get_hitbox_for_action(action)
 	if hitbox != null:
@@ -367,6 +456,8 @@ func start_block() -> void:
 	if is_dead:
 		return
 	if shield_block_area == null:
+		return
+	if get_combat_style() != "one_handed_and_shield":
 		return
 	if is_blocking:
 		return
@@ -550,7 +641,6 @@ func _on_inventory_equipment_changed() -> void:
 	if animation_tree != null:
 		animation_tree.active = true
 
-	current_attack_index = 0
 
 	_clear_equipped_main_hand_visual()
 	_clear_equipped_off_hand_visual()
@@ -665,47 +755,351 @@ func get_attack_speed_multiplier() -> float:
 	return max(float(total_stats.get("attack_speed", 1.0)), 0.1)
 
 func _setup_combat_profiles() -> void:
+	# ==================================================
+	# UNARMED
+	# ==================================================
 	unarmed_profile = CombatProfile.new()
 	unarmed_profile.style_id = "unarmed"
-	unarmed_profile.auto_attacks = [
-		_make_action("unarmed_punch", "Punch", "Melee_Unarmed_Attack_Punch_A", true, false, 0.06, 0.10, 0.20, 1.0, 0.40, 0.55),
-		_make_action("unarmed_kick", "Kick", "Melee_Unarmed_Attack_Kick", true, false, 0.08, 0.12, 0.24, 1.1, 0.40, 0.55)
-	]
 
+	var unarmed_punch := _make_action(
+		"unarmed_punch",
+		"Punch",
+		"Melee_Unarmed_Attack_Punch_A",
+		true,
+		false,
+		0.06,
+		0.10,
+		0.20,
+		1.0,
+		0.40,
+		0.55
+	)
+	unarmed_punch.icon = _get_icon_for_action("unarmed_punch")
+	unarmed_punch.action_type = "auto"
+	unarmed_punch.required_level = 1
+	unarmed_punch.show_in_hud = false
+
+	var unarmed_kick := _make_action(
+		"unarmed_kick",
+		"Kick",
+		"Melee_Unarmed_Attack_Kick",
+		true,
+		false,
+		0.08,
+		0.12,
+		0.24,
+		1.1,
+		0.40,
+		0.55
+	)
+	unarmed_kick.icon = _get_icon_for_action("unarmed_kick")
+	unarmed_kick.action_type = "ability"
+	unarmed_kick.stamina_cost = 12.0
+	unarmed_kick.cooldown = 0.8
+	unarmed_kick.required_level = 2
+	unarmed_kick.show_in_hud = true
+
+	unarmed_profile.auto_attack = unarmed_punch
+	unarmed_profile.abilities = [unarmed_kick]
+	unarmed_profile.block_action = null
+	unarmed_profile.modified_attack_action = null
+
+	# ==================================================
+	# ONE HANDED
+	# ==================================================
 	one_handed_profile = CombatProfile.new()
 	one_handed_profile.style_id = "one_handed"
-	one_handed_profile.auto_attacks = [
-		_make_action("1h_chop", "1H Chop", "Melee_1H_Attack_Chop", false, false, 0.06, 0.10, 0.20, 1.0, 0.35, 0.50),
-		_make_action("1h_slice_diag", "1H Slice Diagonal", "Melee_1H_Attack_Slice_Diagonal", false, false, 0.06, 0.10, 0.20, 1.0, 0.35, 0.50),
-		_make_action("1h_stab", "1H Stab", "Melee_1H_Attack_Stab", false, false, 0.06, 0.10, 0.20, 1.0, 0.35, 0.50)
-	]
 
+	var oh_stab := _make_action(
+		"1h_stab",
+		"1H Stab",
+		"Melee_1H_Attack_Stab",
+		false,
+		false,
+		0.06,
+		0.10,
+		0.20,
+		1.0,
+		0.35,
+		0.50
+	)
+	oh_stab.icon = _get_icon_for_action("1h_stab")
+	oh_stab.action_type = "auto"
+	oh_stab.required_level = 1
+	oh_stab.show_in_hud = false
+
+	var oh_slice := _make_action(
+		"1h_slice_diag",
+		"1H Slice",
+		"Melee_1H_Attack_Slice_Diagonal",
+		false,
+		false,
+		0.07,
+		0.12,
+		0.24,
+		1.3,
+		0.30,
+		0.40
+	)
+	oh_slice.icon = _get_icon_for_action("1h_slice_diag")
+	oh_slice.action_type = "ability"
+	oh_slice.stamina_cost = 15.0
+	oh_slice.cooldown = 1.0
+	oh_slice.required_level = 2
+	oh_slice.show_in_hud = true
+
+	var oh_chop := _make_action(
+		"1h_chop",
+		"1H Chop",
+		"Melee_1H_Attack_Chop",
+		false,
+		false,
+		0.07,
+		0.11,
+		0.24,
+		1.35,
+		0.28,
+		0.38
+	)
+	oh_chop.icon = _get_icon_for_action("1h_chop")
+	oh_chop.action_type = "ability"
+	oh_chop.stamina_cost = 20.0
+	oh_chop.cooldown = 1.4
+	oh_chop.required_level = 4
+	oh_chop.show_in_hud = true
+
+	one_handed_profile.auto_attack = oh_stab
+	one_handed_profile.abilities = [oh_slice, oh_chop]
+	one_handed_profile.block_action = null
+	one_handed_profile.modified_attack_action = null
+
+	# ==================================================
+	# TWO HANDED
+	# ==================================================
 	two_handed_profile = CombatProfile.new()
 	two_handed_profile.style_id = "two_handed"
-	two_handed_profile.auto_attacks = [
-		_make_action("2h_chop", "2H Chop", "Melee_2H_Attack_Chop", false, false, 0.07, 0.11, 0.24, 1.2, 0.20, 0.25),
-		_make_action("2h_slice", "2H Slice", "Melee_2H_Attack_Slice", false, false, 0.07, 0.11, 0.24, 1.2, 0.20, 0.25),
-		_make_action("2h_stab", "2H Stab", "Melee_2H_Attack_Stab", false, false, 0.07, 0.11, 0.24, 1.2, 0.20, 0.25)
-	]
 
+	var th_chop := _make_action(
+		"2h_chop",
+		"2H Chop",
+		"Melee_2H_Attack_Chop",
+		false,
+		false,
+		0.07,
+		0.11,
+		0.24,
+		1.0,
+		0.20,
+		0.25
+	)
+	th_chop.icon = _get_icon_for_action("2h_chop")
+	th_chop.action_type = "auto"
+	th_chop.required_level = 1
+	th_chop.show_in_hud = false
+
+	var th_slice := _make_action(
+		"2h_slice",
+		"Cleave Slice",
+		"Melee_2H_Attack_Slice",
+		false,
+		false,
+		0.09,
+		0.16,
+		0.30,
+		1.4,
+		0.18,
+		0.22
+	)
+	th_slice.icon = _get_icon_for_action("2h_slice")
+	th_slice.action_type = "ability"
+	th_slice.stamina_cost = 20.0
+	th_slice.cooldown = 1.2
+	th_slice.required_level = 2
+	th_slice.show_in_hud = true
+
+	var th_spin := _make_action(
+		"2h_spin",
+		"Heavy Spin",
+		"Melee_2H_Attack_Spin",
+		false,
+		false,
+		0.10,
+		0.20,
+		0.35,
+		1.8,
+		0.12,
+		0.18
+	)
+	th_spin.icon = _get_icon_for_action("2h_spin")
+	th_spin.action_type = "ability"
+	th_spin.stamina_cost = 30.0
+	th_spin.cooldown = 2.0
+	th_spin.required_level = 3
+	th_spin.show_in_hud = true
+
+	var th_whirlwind := _make_action(
+		"2h_spinning",
+		"Whirlwind",
+		"Melee_2H_Attack_Spinning",
+		false,
+		false,
+		0.12,
+		0.30,
+		0.60,
+		2.2,
+		0.10,
+		0.12
+	)
+	th_whirlwind.icon = _get_icon_for_action("2h_spinning")
+	th_whirlwind.action_type = "ability"
+	th_whirlwind.stamina_cost = 45.0
+	th_whirlwind.cooldown = 4.0
+	th_whirlwind.required_level = 5
+	th_whirlwind.show_in_hud = true
+
+	two_handed_profile.auto_attack = th_chop
+	two_handed_profile.abilities = [th_slice, th_spin, th_whirlwind]
+	two_handed_profile.block_action = null
+	two_handed_profile.modified_attack_action = null
+
+	# ==================================================
+	# DUAL WIELD
+	# ==================================================
 	dual_wield_profile = CombatProfile.new()
 	dual_wield_profile.style_id = "dual_wield"
-	dual_wield_profile.auto_attacks = [
-		_make_action("dw_chop", "Dual Chop", "Melee_Dualwield_Attack_Chop", false, false, 0.05, 0.09, 0.18, 1.0, 0.45, 0.60),
-		_make_action("dw_slice", "Dual Slice", "Melee_Dualwield_Attack_Slice", false, false, 0.05, 0.09, 0.18, 1.0, 0.45, 0.60),
-		_make_action("dw_stab", "Dual Stab", "Melee_Dualwield_Attack_Stab", false, false, 0.05, 0.09, 0.18, 1.0, 0.45, 0.60)
-	]
 
+	var dw_stab := _make_action(
+		"dw_stab",
+		"Dual Stab",
+		"Melee_Dualwield_Attack_Stab",
+		false,
+		false,
+		0.05,
+		0.09,
+		0.18,
+		1.0,
+		0.45,
+		0.60
+	)
+	dw_stab.icon = _get_icon_for_action("dw_stab")
+	dw_stab.action_type = "auto"
+	dw_stab.required_level = 1
+	dw_stab.show_in_hud = false
+
+	var dw_slice := _make_action(
+		"dw_slice",
+		"Dual Slice",
+		"Melee_Dualwield_Attack_Slice",
+		false,
+		false,
+		0.06,
+		0.10,
+		0.20,
+		1.25,
+		0.42,
+		0.58
+	)
+	dw_slice.icon = _get_icon_for_action("dw_slice")
+	dw_slice.action_type = "ability"
+	dw_slice.stamina_cost = 16.0
+	dw_slice.cooldown = 0.9
+	dw_slice.required_level = 2
+	dw_slice.show_in_hud = true
+
+	var dw_chop := _make_action(
+		"dw_chop",
+		"Dual Chop",
+		"Melee_Dualwield_Attack_Chop",
+		false,
+		false,
+		0.07,
+		0.12,
+		0.22,
+		1.45,
+		0.38,
+		0.54
+	)
+	dw_chop.icon = _get_icon_for_action("dw_chop")
+	dw_chop.action_type = "ability"
+	dw_chop.stamina_cost = 24.0
+	dw_chop.cooldown = 1.5
+	dw_chop.required_level = 4
+	dw_chop.show_in_hud = true
+
+	dual_wield_profile.auto_attack = dw_stab
+	dual_wield_profile.abilities = [dw_slice, dw_chop]
+	dual_wield_profile.block_action = null
+	dual_wield_profile.modified_attack_action = null
+
+	# ==================================================
+	# ONE HANDED + SHIELD
+	# ==================================================
 	one_handed_and_shield_profile = CombatProfile.new()
 	one_handed_and_shield_profile.style_id = "one_handed_and_shield"
-	one_handed_and_shield_profile.auto_attacks = [
-		_make_action("ohs_chop", "Weapon Chop", "Melee_1H_Attack_Chop", false, false, 0.06, 0.10, 0.20, 1.0, 0.30, 0.40),
-		_make_action("ohs_slice_diag", "Weapon Slice Diagonal", "Melee_1H_Attack_Slice_Diagonal", false, false, 0.06, 0.10, 0.20, 1.0, 0.30, 0.40),
-		_make_action("ohs_stab", "Weapon Stab", "Melee_1H_Attack_Stab", false, false, 0.06, 0.10, 0.20, 1.0, 0.30, 0.40)
-	]
-	one_handed_and_shield_profile.abilities = [
-		_make_action("shield_bash", "Shield Bash", "Melee_Block_Attack", false, true, 0.08, 0.12, 0.24, 1.0, 0.25, 0.35)
-	]
+
+	var ohs_stab := _make_action(
+		"ohs_stab",
+		"Weapon Stab",
+		"Melee_1H_Attack_Stab",
+		false,
+		false,
+		0.06,
+		0.10,
+		0.20,
+		1.0,
+		0.30,
+		0.40
+	)
+	ohs_stab.icon = _get_icon_for_action("ohs_stab")
+	ohs_stab.action_type = "auto"
+	ohs_stab.required_level = 1
+	ohs_stab.show_in_hud = false
+
+	var shield_bash := _make_action(
+		"shield_bash",
+		"Shield Bash",
+		"Melee_Block_Attack",
+		false,
+		true,
+		0.08,
+		0.12,
+		0.24,
+		1.25,
+		0.25,
+		0.35
+	)
+	shield_bash.icon = _get_icon_for_action("shield_bash")
+	shield_bash.action_type = "ability"
+	shield_bash.stamina_cost = 25.0
+	shield_bash.cooldown = 1.5
+	shield_bash.required_level = 2
+	shield_bash.show_in_hud = true
+
+	var guard_stance := _make_action(
+		"guard_stance",
+		"Guard Stance",
+		"Melee_Blocking",
+		false,
+		true,
+		0.00,
+		0.00,
+		0.20,
+		0.0,
+		0.20,
+		0.20
+	)
+	guard_stance.icon = preload("res://UI/ICONS/Abilitys/shield.png")
+	guard_stance.action_type = "ability"
+	guard_stance.stamina_cost = 10.0
+	guard_stance.cooldown = 3.0
+	guard_stance.required_level = 3
+	guard_stance.show_in_hud = true
+
+	one_handed_and_shield_profile.auto_attack = ohs_stab
+	one_handed_and_shield_profile.abilities = [shield_bash]
+	one_handed_and_shield_profile.block_action = null
+	one_handed_and_shield_profile.modified_attack_action = shield_bash
+	
 
 func _make_action(
 	action_id: String,
@@ -733,6 +1127,8 @@ func _make_action(
 	action.damage_multiplier = damage_multiplier
 	action.move_multiplier = move_multiplier
 	action.turn_multiplier = turn_multiplier
+	action.required_level = 1
+	action.show_in_hud = false
 	return action
 
 func get_current_combat_profile() -> CombatProfile:
@@ -752,21 +1148,9 @@ func get_current_combat_profile() -> CombatProfile:
 
 func get_current_auto_attack() -> CombatAction:
 	var profile := get_current_combat_profile()
-	if profile == null or profile.auto_attacks.is_empty():
+	if profile == null:
 		return null
-
-	var index := current_attack_index % profile.auto_attacks.size()
-	return profile.auto_attacks[index]
-
-func _advance_auto_attack_index() -> void:
-	var profile := get_current_combat_profile()
-	if profile == null or profile.auto_attacks.is_empty():
-		current_attack_index = 0
-		return
-
-	current_attack_index += 1
-	if current_attack_index >= profile.auto_attacks.size():
-		current_attack_index = 0
+	return profile.auto_attack
 
 func _get_hitbox_for_action(action: CombatAction) -> HitboxComponent:
 	if action == null:
@@ -779,6 +1163,148 @@ func _get_hitbox_for_action(action: CombatAction) -> HitboxComponent:
 		return off_hand_hitbox
 
 	return main_hand_hitbox
+	
+func _update_resource_regen(delta: float) -> void:
+	if not is_attacking:
+		current_stamina = min(current_stamina + stamina_regen_per_second * delta, max_stamina)
+
+	current_mana = min(current_mana + mana_regen_per_second * delta, max_mana)
+
+func _update_cooldowns(delta: float) -> void:
+	var keys := action_cooldowns.keys()
+
+	for key in keys:
+		action_cooldowns[key] = max(float(action_cooldowns[key]) - delta, 0.0)
+
+		if action_cooldowns[key] <= 0.0:
+			action_cooldowns.erase(key)
+
+func _has_enough_resources_for_action(action: CombatAction) -> bool:
+	if action == null:
+		return false
+
+	if current_stamina < action.stamina_cost:
+		print("ACTION FAIL: not enough stamina for:", action.action_id)
+		return false
+
+	if current_mana < action.mana_cost:
+		print("ACTION FAIL: not enough mana for:", action.action_id)
+		return false
+
+	return true
+
+func _is_action_on_cooldown(action: CombatAction) -> bool:
+	if action == null:
+		return true
+
+	return action_cooldowns.has(action.action_id) and float(action_cooldowns[action.action_id]) > 0.0
+
+func _consume_action_costs(action: CombatAction) -> void:
+	if action == null:
+		return
+
+	current_stamina = max(current_stamina - action.stamina_cost, 0.0)
+	current_mana = max(current_mana - action.mana_cost, 0.0)
+
+func _start_action_cooldown(action: CombatAction) -> void:
+	if action == null:
+		return
+
+	if action.cooldown > 0.0:
+		action_cooldowns[action.action_id] = action.cooldown
+
+# ==================================================
+# HELPERS UI
+# ==================================================
+
+func get_stamina_percent() -> float:
+	if max_stamina <= 0.0:
+		return 0.0
+	return current_stamina / max_stamina
+
+func get_mana_percent() -> float:
+	if max_mana <= 0.0:
+		return 0.0
+	return current_mana / max_mana
+
+func get_current_abilities() -> Array[CombatAction]:
+	return get_unlocked_abilities()
+
+func get_action_cooldown_remaining(action_id: String) -> float:
+	if not action_cooldowns.has(action_id):
+		return 0.0
+	return float(action_cooldowns[action_id])
+
+func get_action_cooldown_percent(action: CombatAction) -> float:
+	if action == null:
+		return 0.0
+	if action.cooldown <= 0.0:
+		return 0.0
+
+	var remaining := get_action_cooldown_remaining(action.action_id)
+	return clamp(remaining / action.cooldown, 0.0, 1.0)
+	
+func has_enough_resources_for_action(action: CombatAction) -> bool:
+	if action == null:
+		return false
+	return current_stamina >= action.stamina_cost and current_mana >= action.mana_cost
+
+func _get_icon_for_action(action_id: String) -> Texture2D:
+	var class_id := ""
+	if character_class != null:
+		class_id = character_class.class_id
+
+	match action_id:
+		# =========================
+		# UNARMED
+		# =========================
+		"unarmed_punch":
+			return preload("res://UI/ICONS/Abilitys/punch-blast.png")
+
+		"unarmed_kick":
+			return preload("res://UI/ICONS/Abilitys/boot-kick.png")
+
+		# =========================
+		# SHIELD
+		# =========================
+		"shield_bash":
+			return preload("res://UI/ICONS/Abilitys/shield-bash.png")
+
+		# =========================
+		# ONE HANDED / TWO HANDED
+		# =========================
+		"1h_chop", "ohs_chop", "2h_chop":
+			if class_id == "knight":
+				return preload("res://UI/ICONS/Abilitys/saber-slash.png")
+			return preload("res://UI/ICONS/Abilitys/wood-axe.png")
+
+		"1h_stab", "ohs_stab", "2h_stab":
+			if class_id == "knight":
+				return preload("res://UI/ICONS/Abilitys/saber-slash.png")
+			return preload("res://UI/ICONS/Abilitys/hatchet.png")
+
+		"1h_slice_diag", "2h_slice":
+			if class_id == "knight":
+				return preload("res://UI/ICONS/Abilitys/saber-slash.png")
+			return preload("res://UI/ICONS/Abilitys/axe-swing.png")
+
+		"2h_spin":
+			if class_id == "knight":
+				return preload("res://UI/ICONS/Abilitys/spinning-sword.png")
+			return preload("res://UI/ICONS/Abilitys/battle-axe.png")
+
+		"2h_spinning":
+			return preload("res://UI/ICONS/Abilitys/whirlwind.png")
+
+		# =========================
+		# DUAL WIELD
+		# =========================
+		"dw_chop", "dw_slice", "dw_stab":
+			if class_id == "knight":
+				return preload("res://UI/ICONS/Abilitys/saber-slash.png")
+			return preload("res://UI/ICONS/Abilitys/axe-swing.png")
+
+	return null
 
 # ==================================================
 # DEBUG EQUIP TESTS
