@@ -76,32 +76,24 @@ static var ITEM_VARIANTS := {
 # Jo højere weight, jo større chance for drop af netop den item_type
 static var MOB_LOOT_TABLES := {
 	"skeleton_unarmed": [
-		{ "item_type": "axe-1-handed", "weight": 70 },
-		{ "item_type": "health_potion", "weight": 30 }
-	],
-
-	"skeleton_warrior": [
-		{ "item_type": "axe-1-handed", "weight": 40 },
-		{ "item_type": "sword-1-handed", "weight": 35 },
-		{ "item_type": "shield", "weight": 20 },
-		{ "item_type": "health_potion", "weight": 5 }
-	],
-
-	"skeleton_archer": [
-		{ "item_type": "crossbow", "weight": 75 },
-		{ "item_type": "health_potion", "weight": 25 }
-	],
-
-	"skeleton_mage": [
-		{ "item_type": "staff", "weight": 60 },
-		{ "item_type": "wand", "weight": 30 },
+		{ "item_type": "axe-1-handed", "weight": 55 },
+		{ "item_type": "axe-2-handed", "weight": 20 },
+		{ "item_type": "shield", "weight": 15 },
 		{ "item_type": "health_potion", "weight": 10 }
 	],
 
-	"orc_grunt": [
-		{ "item_type": "axe-1-handed", "weight": 50 },
+	"skeleton_archer": [
+		{ "item_type": "axe-1-handed", "weight": 45 },
+		{ "item_type": "axe-2-handed", "weight": 25 },
+		{ "item_type": "shield", "weight": 20 },
+		{ "item_type": "health_potion", "weight": 10 }
+	],
+
+	"bone_brute": [
+		{ "item_type": "axe-1-handed", "weight": 35 },
 		{ "item_type": "axe-2-handed", "weight": 35 },
-		{ "item_type": "health_potion", "weight": 15 }
+		{ "item_type": "shield", "weight": 20 },
+		{ "item_type": "health_potion", "weight": 10 }
 	]
 }
 
@@ -124,22 +116,49 @@ static func get_rarity_color(rarity: String) -> Color:
 # =========================
 # RARITY
 # =========================
-static func roll_rarity(is_elite: bool = false, is_boss: bool = false) -> String:
+static func roll_rarity_for_mob(mob_id: String, is_elite: bool = false, is_boss: bool = false) -> String:
 	var roll := randf()
 
 	if is_boss:
-		if roll < 0.7:
+		if roll < 0.55:
+			return "uncommon"
+		elif roll < 0.90:
 			return "rare"
-		return "epic"
+		else:
+			return "epic"
 
 	if is_elite:
-		if roll < 0.6:
+		if roll < 0.60:
 			return "uncommon"
-		return "rare"
+		elif roll < 0.92:
+			return "rare"
+		else:
+			return "epic"
 
-	if roll < 0.8:
-		return "common"
-	return "uncommon"
+	match mob_id:
+		"skeleton_unarmed":
+			if roll < 0.82:
+				return "common"
+			elif roll < 0.97:
+				return "uncommon"
+			else:
+				return "rare"
+
+		"skeleton_archer":
+			if roll < 0.68:
+				return "common"
+			elif roll < 0.93:
+				return "uncommon"
+			else:
+				return "rare"
+
+		_:
+			if roll < 0.75:
+				return "common"
+			elif roll < 0.95:
+				return "uncommon"
+			else:
+				return "rare"
 
 # =========================
 # RARITY -> NUMBER OF STATS
@@ -317,16 +336,23 @@ static func generate_item_for_mob(mob_id: String, is_elite: bool = false, is_bos
 	if item_type == "":
 		return null
 
-	return generate_item(item_type, is_elite, is_boss)
+	var rarity := roll_rarity_for_mob(mob_id, is_elite, is_boss)
+	return generate_item(item_type, is_elite, is_boss, rarity)
+	
 
 # =========================
 # MAIN ITEM GENERATION
 # =========================
-static func generate_item(item_type: String, is_elite: bool = false, is_boss: bool = false) -> ItemData:
+static func generate_item(item_type: String, is_elite: bool = false, is_boss: bool = false, forced_rarity: String = "") -> ItemData:
 	var item := ItemData.new()
 
 	item.item_type = item_type
-	item.rarity = roll_rarity(is_elite, is_boss)
+	
+	if forced_rarity != "":
+		item.rarity = forced_rarity
+	else:
+		item.rarity = roll_rarity_for_mob("", is_elite, is_boss)
+	
 	item.is_two_handed = is_two_handed_item_type(item_type)
 	item.weapon_family = get_weapon_family_for_item_type(item_type)
 
@@ -380,3 +406,21 @@ static func is_two_handed_item_type(item_type: String) -> bool:
 			return true
 		_:
 			return false
+			
+static func apply_variant_data_to_item(item: ItemData) -> void:
+	if item == null:
+		return
+
+	if item.item_type == "" or item.variant_id == "":
+		return
+
+	if not LootGenerator.ITEM_VARIANTS.has(item.item_type):
+		return
+
+	var variants: Array = LootGenerator.ITEM_VARIANTS[item.item_type]
+	for variant in variants:
+		if str(variant.get("id", "")) == item.variant_id:
+			item.icon = variant.get("icon", null)
+			item.equip_mesh_scene = variant.get("equip_mesh", null)
+			item.drop_mesh_scene = variant.get("drop_mesh", null)
+			return

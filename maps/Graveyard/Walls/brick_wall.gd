@@ -3,7 +3,7 @@ extends MeshInstance3D
 @export_group("Surface Indices")
 @export var center_surface: int = 1
 @export var trim_surface: int = 2
-@export var stone_surface: int = 3
+@export var stone_surface: int = -1
 
 @export_group("Base Colors")
 @export var center_color: Color = Color("2B332B")
@@ -71,6 +71,16 @@ func _setup_materials() -> void:
 		stone_material.emission_enabled = false
 
 func _make_unique_material(surface_index: int) -> StandardMaterial3D:
+	if surface_index < 0:
+		return null
+
+	if mesh == null:
+		return null
+
+	var surface_count := mesh.get_surface_count()
+	if surface_index >= surface_count:
+		return null
+
 	var mat := get_active_material(surface_index) as StandardMaterial3D
 	if mat == null:
 		return null

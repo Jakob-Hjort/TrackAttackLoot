@@ -24,6 +24,9 @@ func setup(dir: Vector3) -> void:
 	direction = dir.normalized()
 	look_at(global_position + direction, Vector3.UP)
 
+func set_damage(value: int) -> void:
+	damage = value
+
 func _on_body_entered(body: Node) -> void:
 	queue_free()
 

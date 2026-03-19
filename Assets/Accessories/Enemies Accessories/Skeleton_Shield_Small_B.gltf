@@ -55,8 +55,8 @@
     "images" : [
         {
             "mimeType" : "image/png",
-            "name" : "skeleton_texture",
-            "uri" : "skeleton_texture.png"
+            "name" : "skeleton_texture_A",
+            "uri" : "skeleton_texture_A.png"
         }
     ],
     "accessors" : [

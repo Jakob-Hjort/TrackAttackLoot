@@ -15,10 +15,10 @@ const MOUSE_SENSITIVITY := 0.01
 # ==================================================
 # DEBUG EQUIP TESTS
 # ==================================================
-const DEBUG_EQUIP_TESTS_ENABLED := true
-const DEBUG_ITEM_1H_AXE := "axe-1-handed"
-const DEBUG_ITEM_2H_AXE := "axe-2-handed"
-const DEBUG_ITEM_SHIELD := "shield"
+const DEBUG_EQUIP_TESTS_ENABLED := false
+#const DEBUG_ITEM_1H_AXE := "axe-1-handed"
+#const DEBUG_ITEM_2H_AXE := "axe-2-handed"
+#const DEBUG_ITEM_SHIELD := "shield"
 
 # ==================================================
 # NODE REFERENCES
@@ -59,7 +59,7 @@ var is_blocking := false
 
 var attack_move_multiplier := 0.35
 var attack_turn_multiplier := 0.45
-var combat_action_token: int = 0
+var combat_action_token: int = 1
 
 var max_stamina: float = 100.0
 var current_stamina: float = 100.0
@@ -107,9 +107,9 @@ func _ready() -> void:
 	_apply_character_class_data()
 	_setup_combat_profiles()
 
-	var test_item = LootGenerator.generate_item("axe-1-handed")
-	inventory.add_item(test_item)
-	inventory.equip_item(test_item)
+	#var test_item = LootGenerator.generate_item("axe-1-handed")
+	#inventory.add_item(test_item)
+	#inventory.equip_item(test_item)
 
 	health_component.damaged.connect(_on_damaged)
 	health_component.died.connect(_on_died)
@@ -121,7 +121,11 @@ func _ready() -> void:
 
 		_on_inventory_stats_changed()
 		_on_inventory_equipment_changed()
+	
+		if GameState.pending_restore:
+			GameState.restore_player_state(self)
 
+	
 	if inventory_ui != null:
 		inventory_ui.visible = false
 
@@ -131,6 +135,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 	locomotion_blend_pos = Vector2.ZERO
+	
 
 # ==================================================
 # INPUT
@@ -143,8 +148,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_inventory"):
 		toggle_inventory()
 
-	if DEBUG_EQUIP_TESTS_ENABLED:
-		_debug_handle_test_keys(event)
 
 func toggle_inventory() -> void:
 	if inventory_ui == null:
@@ -238,9 +241,11 @@ func _physics_process(delta: float) -> void:
 
 	var move_direction := (right * input_vector.x + forward * input_vector.y).normalized()
 	var is_sprinting := false
+	if _has_input_action("sprint"):
+		is_sprinting = Input.is_action_pressed("sprint")
 
 	var current_speed := WALK_SPEED
-	if is_sprinting and input_vector.y > 0.0 and not is_blocking:
+	if is_sprinting and input_vector.y > 0.0 and not is_blocking and not is_attacking:
 		current_speed = RUN_SPEED
 
 	if input_vector.y < 0.0:
@@ -1309,30 +1314,30 @@ func _get_icon_for_action(action_id: String) -> Texture2D:
 # ==================================================
 # DEBUG EQUIP TESTS
 # ==================================================
-func _debug_handle_test_keys(event: InputEvent) -> void:
-	if not (event is InputEventKey):
-		return
-
-	var key_event := event as InputEventKey
-	if not key_event.pressed or key_event.echo:
-		return
-
-	match key_event.keycode:
-		KEY_F1:
-			print("DEBUG: Equip 1H axe")
-			_debug_equip_loadout(DEBUG_ITEM_1H_AXE, "")
-		KEY_F2:
-			print("DEBUG: Equip 2H axe")
-			_debug_equip_loadout(DEBUG_ITEM_2H_AXE, "")
-		KEY_F3:
-			print("DEBUG: Equip shield only")
-			_debug_equip_loadout("", DEBUG_ITEM_SHIELD)
-		KEY_F4:
-			print("DEBUG: Equip 1H axe + shield")
-			_debug_equip_loadout(DEBUG_ITEM_1H_AXE, DEBUG_ITEM_SHIELD)
-		KEY_F5:
-			print("DEBUG: Clear equipment")
-			_debug_clear_equipment()
+#func _debug_handle_test_keys(event: InputEvent) -> void:
+	#if not (event is InputEventKey):
+		#return
+#
+	#var key_event := event as InputEventKey
+	#if not key_event.pressed or key_event.echo:
+		#return
+#
+	#match key_event.keycode:
+		#KEY_F1:
+			#print("DEBUG: Equip 1H axe")
+			#_debug_equip_loadout(DEBUG_ITEM_1H_AXE, "")
+		#KEY_F2:
+			#print("DEBUG: Equip 2H axe")
+			#_debug_equip_loadout(DEBUG_ITEM_2H_AXE, "")
+		#KEY_F3:
+			#print("DEBUG: Equip shield only")
+			#_debug_equip_loadout("", DEBUG_ITEM_SHIELD)
+		#KEY_F4:
+			#print("DEBUG: Equip 1H axe + shield")
+			#_debug_equip_loadout(DEBUG_ITEM_1H_AXE, DEBUG_ITEM_SHIELD)
+		#KEY_F5:
+			#print("DEBUG: Clear equipment")
+			#_debug_clear_equipment()
 
 func _debug_equip_loadout(main_item_id: String, off_item_id: String) -> void:
 	if inventory == null:

@@ -13,7 +13,7 @@ signal active_potion_changed(item_data)
 
 @export var coins: int = 0
 @export var xp: int = 0
-@export var level: int = 5
+@export var level: int = 0
 
 @export var base_max_health: int = 100
 @export var base_damage: int = 5
@@ -432,6 +432,12 @@ func _add_item_stats_to_total(item_data: ItemData, total: Dictionary) -> void:
 		if not total.has(key):
 			total[key] = 0
 		total[key] += item_data.stats[key]
+
+func clear_all_items_for_restore() -> void:
+	items.clear()
+	equipped_main_hand = null
+	equipped_off_hand = null
+	active_health_potion = null
 
 
 # ==================================================

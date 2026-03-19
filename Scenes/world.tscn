@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c27rl7p52eq5k" path="res://maps/Graveyard/Walls/wall-brik.tscn" id="6_o06y3"]
 [ext_resource type="PackedScene" uid="uid://bxa04fnhgeta2" path="res://maps/Graveyard/Gate/MainGate.tscn" id="7_0pcbe"]
 [ext_resource type="PackedScene" uid="uid://c2xjdod3ogbr4" path="res://Scenes/player.tscn" id="7_k7acu"]
-[ext_resource type="PackedScene" uid="uid://cr176acc33rga" path="res://Assets/Enemies/Scenes/skeleton_minion_unarmed.tscn" id="7_o06y3"]
+[ext_resource type="PackedScene" uid="uid://b25lxx8kw2myj" path="res://Assets/Enemies/Skeleton_Minion_unarmed.glb" id="7_o06y3"]
 [ext_resource type="PackedScene" uid="uid://cgyic7vhmojg6" path="res://maps/Graveyard/Fence/fence.tscn" id="8_k7acu"]
 [ext_resource type="PackedScene" uid="uid://cr6gjg1ckjtlr" path="res://maps/Graveyard/Trees/treefall1.tscn" id="10_ikia7"]
 [ext_resource type="PackedScene" uid="uid://bifqqh5wpxa4n" path="res://maps/Graveyard/Trees/treefall2.tscn" id="11_ikia7"]

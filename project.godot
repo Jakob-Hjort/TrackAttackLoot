@@ -15,6 +15,10 @@ run/main_scene="uid://bk8l8lrhlyij5"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GameState="*uid://cmue1bpjcjhbj"
+
 [display]
 
 window/size/viewport_width=1920
@@ -22,6 +26,10 @@ window/size/viewport_height=1080
 window/size/mode=3
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[editor]
+
+version_control/autoload_on_startup=true
 
 [global_group]
 

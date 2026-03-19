@@ -437,7 +437,11 @@ func spawn_loot() -> void:
 		print("Failed to instantiate loot scene")
 		return
 
-	get_tree().current_scene.add_child(loot)
+	var run_holder = get_tree().current_scene.get_node_or_null("RunContentHolder")
+	if run_holder != null:
+		run_holder.add_child(loot)
+	else:
+		get_tree().current_scene.add_child(loot)
 	loot.global_position = global_position + Vector3(0, 1.0, 0)
 	loot.set_item(item)
 

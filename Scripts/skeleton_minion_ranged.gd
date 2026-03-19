@@ -12,6 +12,17 @@ const ROAM_RADIUS := 5.0
 const ROAM_WAIT_MIN := 1.0
 const ROAM_WAIT_MAX := 2.5
 
+const ANIM_IDLE := "SkeletonUnarmed_runtime/Skeletons_Idle"
+const ANIM_WALK := "SkeletonUnarmed_runtime/Skeletons_Walking"
+const ANIM_RUN := "SkeletonUnarmed_runtime/Running_B"
+const ANIM_HIT := "SkeletonUnarmed_runtime/Hit_B"
+const ANIM_DEATH := "SkeletonUnarmed_runtime/Skeletons_Death"
+
+const ANIM_AIM := "Skeleton_ranged/Ranged_2H_Aiming"
+const ANIM_RELOAD := "Skeleton_ranged/Ranged_2H_Reload"
+const ANIM_SHOOT := "Skeleton_ranged/Ranged_2H_Shoot"
+const ANIM_SHOOTING := "Skeleton_ranged/Ranged_2H_Shooting"
+
 @export var player_path: NodePath
 @export var projectile_scene: PackedScene
 @export var attack_damage: int = 8
@@ -29,7 +40,7 @@ const ROAM_WAIT_MAX := 2.5
 @onready var health_bar_sprite: Sprite3D = $HealthBarAnchor/Sprite3D
 @onready var enemy_health_bar = $HealthBarAnchor/SubViewport/Control/EnemyHealthBar
 
-@onready var shoot_point: Node3D = $Rig_Medium/Skeleton3D/Right_Hand/Skeleton_Crossbow2/ShootPoint
+@onready var shoot_point: Node3D = $Rig_Medium.find_child("ShootPoint", true, false) as Node3D
 
 @export var mob_id: String = "skeleton_archer"
 @export var drop_chance: float = 0.30
@@ -49,7 +60,7 @@ var roam_target: Vector3
 var is_roaming := false
 var is_waiting := false
 
-func _ready() -> void:	
+func _ready() -> void:
 	if health_bar_sprite and health_bar_viewport:
 		health_bar_sprite.texture = health_bar_viewport.get_texture()
 
@@ -73,7 +84,7 @@ func _ready() -> void:
 		enemy_health_bar.visible = false
 		enemy_health_bar.set_health(health_component.current_health, health_component.max_health)
 
-	play_animation("Skeleton_ranged/Skeletons_Idle")
+	play_animation(ANIM_IDLE)
 
 func _physics_process(_delta: float) -> void:
 	if is_dead or is_hit:
@@ -84,7 +95,7 @@ func _physics_process(_delta: float) -> void:
 		_find_player()
 		if player == null:
 			velocity = Vector3.ZERO
-			play_animation("Skeleton_ranged/Skeletons_Idle")
+			play_animation(ANIM_IDLE)
 			move_and_slide()
 			return
 
@@ -103,7 +114,7 @@ func _physics_process(_delta: float) -> void:
 		if can_attack and not is_attacking:
 			start_attack()
 		elif not is_attacking:
-			play_animation("Skeleton_ranged/Ranged_2H_Aiming")
+			play_animation(ANIM_AIM)
 	elif can_see_player and distance_to_player <= CHASE_RANGE:
 		chase_player()
 	else:
@@ -148,7 +159,7 @@ func chase_player() -> void:
 
 	if nav_agent.is_navigation_finished():
 		velocity = Vector3.ZERO
-		play_animation("Skeleton_ranged/Skeletons_Idle")
+		play_animation(ANIM_IDLE)
 		return
 
 	var next_point := nav_agent.get_next_path_position()
@@ -157,7 +168,7 @@ func chase_player() -> void:
 
 	if move_direction.length() < 0.05:
 		velocity = Vector3.ZERO
-		play_animation("Skeleton_ranged/Skeletons_Idle")
+		play_animation(ANIM_IDLE)
 		return
 
 	move_direction = move_direction.normalized()
@@ -168,7 +179,7 @@ func chase_player() -> void:
 	face_direction(move_direction)
 
 	if not is_attacking:
-		play_animation("Skeleton_ranged/Skeletons_Walking")
+		play_animation(ANIM_WALK)
 
 func retreat_from_player() -> void:
 	if player == null:
@@ -189,7 +200,7 @@ func retreat_from_player() -> void:
 	face_player()
 
 	if not is_attacking:
-		play_animation("Skeleton_ranged/Skeletons_Walking")
+		play_animation(ANIM_WALK)
 
 func roam() -> void:
 	if is_attacking or is_dead or is_hit:
@@ -197,7 +208,7 @@ func roam() -> void:
 
 	if is_waiting:
 		velocity = Vector3.ZERO
-		play_animation("Skeleton_ranged/Skeletons_Idle")
+		play_animation(ANIM_IDLE)
 		return
 
 	if not is_roaming:
@@ -215,7 +226,7 @@ func roam() -> void:
 	if nav_agent.is_navigation_finished():
 		choose_new_roam_target()
 		velocity = Vector3.ZERO
-		play_animation("Skeleton_ranged/Skeletons_Idle")
+		play_animation(ANIM_IDLE)
 		return
 
 	var next_point := nav_agent.get_next_path_position()
@@ -225,7 +236,7 @@ func roam() -> void:
 	if move_direction.length() < 0.05:
 		choose_new_roam_target()
 		velocity = Vector3.ZERO
-		play_animation("Skeleton_ranged/Skeletons_Idle")
+		play_animation(ANIM_IDLE)
 		return
 
 	move_direction = move_direction.normalized()
@@ -236,7 +247,7 @@ func roam() -> void:
 	face_direction(move_direction)
 
 	if not is_attacking:
-		play_animation("Skeleton_ranged/Skeletons_Walking")
+		play_animation(ANIM_WALK)
 
 func choose_new_roam_target() -> void:
 	is_roaming = true
@@ -261,7 +272,7 @@ func start_roam_wait() -> void:
 	is_roaming = false
 	is_waiting = true
 	velocity = Vector3.ZERO
-	play_animation("Skeleton_ranged/Skeletons_Idle")
+	play_animation(ANIM_IDLE)
 
 	var wait_time := randf_range(ROAM_WAIT_MIN, ROAM_WAIT_MAX)
 	await get_tree().create_timer(wait_time).timeout
@@ -278,11 +289,10 @@ func start_attack() -> void:
 	current_anim = ""
 	velocity = Vector3.ZERO
 
-	play_animation("Skeleton_ranged/Ranged_2H_Shoot")
+	play_animation(ANIM_SHOOT)
 
-	var anim := animation_player.get_animation("Skeleton_ranged/Ranged_2H_Shoot")
+	var anim := animation_player.get_animation(ANIM_SHOOT)
 
-	# Justér dette tal til det øjeblik hvor armbrøsten peger rigtigt frem
 	await get_tree().create_timer(0.38).timeout
 	if not is_dead and is_attacking:
 		shoot_projectile()
@@ -295,7 +305,7 @@ func start_attack() -> void:
 	if is_dead:
 		return
 
-	play_animation("Skeleton_ranged/Ranged_2H_Reload")
+	play_animation(ANIM_RELOAD)
 	await get_tree().create_timer(ATTACK_COOLDOWN).timeout
 
 	if is_dead:
@@ -326,11 +336,13 @@ func shoot_projectile() -> void:
 	get_tree().current_scene.add_child(arrow)
 
 	arrow.global_position = shoot_point.global_position
-	print("Arrow spawn pos:", arrow.global_position)
+	arrow.global_rotation = shoot_point.global_rotation
 
 	var target_pos := player.global_position + Vector3(0, 1.0, 0)
 	var dir := (target_pos - shoot_point.global_position).normalized()
-	print("Arrow dir:", dir)
+
+	if arrow.has_method("set_damage"):
+		arrow.set_damage(attack_damage)
 
 	if arrow.has_method("setup"):
 		arrow.setup(dir)
@@ -361,9 +373,9 @@ func play_hit() -> void:
 	is_waiting = false
 	velocity = Vector3.ZERO
 	current_anim = ""
-	play_animation("Skeleton_ranged/Skeletons_Taunt")
+	play_animation(ANIM_HIT)
 
-	var anim := animation_player.get_animation("Skeleton_ranged/Skeletons_Taunt")
+	var anim := animation_player.get_animation(ANIM_HIT)
 	if anim != null:
 		await get_tree().create_timer(min(anim.length, 0.35)).timeout
 	else:
@@ -375,7 +387,7 @@ func play_hit() -> void:
 func die() -> void:
 	if enemy_health_bar:
 		enemy_health_bar.visible = false
-	
+
 	if is_dead or animation_player == null:
 		return
 
@@ -392,9 +404,9 @@ func die() -> void:
 	spawn_loot()
 
 	current_anim = ""
-	play_animation("Minions Animation/Death_A")
+	play_animation(ANIM_DEATH)
 
-	var anim := animation_player.get_animation("Minions Animation/Death_A")
+	var anim := animation_player.get_animation(ANIM_DEATH)
 	if anim != null:
 		await get_tree().create_timer(anim.length).timeout
 	else:
@@ -423,6 +435,10 @@ func play_animation(anim_name: String) -> void:
 		return
 
 	if current_anim == anim_name:
+		return
+
+	if not animation_player.has_animation(anim_name):
+		print("Animation not found: ", anim_name)
 		return
 
 	current_anim = anim_name
@@ -469,7 +485,11 @@ func spawn_loot() -> void:
 		print("Failed to instantiate loot scene")
 		return
 
-	get_tree().current_scene.add_child(loot)
+	var run_holder = get_tree().current_scene.get_node_or_null("RunContentHolder")
+	if run_holder != null:
+		run_holder.add_child(loot)
+	else:
+		get_tree().current_scene.add_child(loot)
 	loot.global_position = global_position + Vector3(0, 1.0, 0)
 	loot.set_item(item)
 
