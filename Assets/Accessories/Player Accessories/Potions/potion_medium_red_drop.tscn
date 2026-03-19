@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c81df6t051gw"]
+
+[ext_resource type="PackedScene" uid="uid://15ul38y0o8j5" path="res://Assets/Accessories/Player Accessories/Potions/potion_medium_red.gltf" id="1_rxgex"]
+
+[node name="Node3D" type="Node3D" unique_id=294760987]
+
+[node name="potion_medium_red2" parent="." unique_id=2033756295 instance=ExtResource("1_rxgex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

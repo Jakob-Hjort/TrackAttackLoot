@@ -30,8 +30,8 @@ static var ITEM_VARIANTS := {
 			"id": "shield_a",
 			"name": "Wooden Shield",
 			"icon": preload("res://UI/ICONS/generated/shield_a2.png"),
-			"equip_mesh": preload("res://Assets/Characters/Scenes/Weapons/shields/shield_a_equip.tscn"),
-			"drop_mesh": preload("res://Assets/Characters/Scenes/Weapons/shields/shield_a_drop.tscn")
+			"equip_mesh": preload("res://Assets/Characters/Scenes/Weapons/Shields/shield_a_equip.tscn"),
+			"drop_mesh": preload("res://Assets/Characters/Scenes/Weapons/Shields/shield_a_drop.tscn")
 		}
 	],
 	"crossbow": [
@@ -46,22 +46,26 @@ static var ITEM_VARIANTS := {
 		{
 			"id": "health_potion_small",
 			"name": "Small Health Potion",
-			"icon": preload("res://UI/ICONS/generated/potion_small_red2.png")
+			"icon": preload("res://UI/ICONS/generated/potion_small_red2.png"),
+			"drop_mesh": preload("res://Assets/Accessories/Player Accessories/Potions/potion_small_red_drop.tscn")
 		},
 		{
 			"id": "health_potion_medium",
 			"name": "Medium Health Potion",
-			"icon": preload("res://UI/ICONS/generated/potion_medium_red2.png")
+			"icon": preload("res://UI/ICONS/generated/potion_medium_red2.png"),
+			"drop_mesh": preload("res://Assets/Accessories/Player Accessories/Potions/potion_medium_red_drop.tscn")
 		},
 		{
 			"id": "health_potion_large",
 			"name": "Large Health Potion",
-			"icon": preload("res://UI/ICONS/generated/potion_large_red2.png")
+			"icon": preload("res://UI/ICONS/generated/potion_large_red2.png"),
+			"drop_mesh": preload("res://Assets/Accessories/Player Accessories/Potions/potion_large_red_drop.tscn")
 		},
 		{
 			"id": "health_potion_huge",
 			"name": "Huge Health Potion",
-			"icon": preload("res://UI/ICONS/generated/potion_huge_red2.png")
+			"icon": preload("res://UI/ICONS/generated/potion_huge_red2.png"),
+			"drop_mesh": preload("res://Assets/Accessories/Player Accessories/Potions/potion_huge_red_drop.tscn")
 		}
 	]
 }
